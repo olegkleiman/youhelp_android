@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">You Help</string>
+    <string name="action_settings">Settings&#8230;</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="hint">Hint</string>
+
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">MainActivity</string>
+     
+    <string name="pref_send_report">Send crash reports</string>
+    <string name="pref_send_report_summary">Helps to fix bugs</string>
+    <string name="pref_sync_frequency">Maps Applications</string>
+    <string name="pref_sync_frequency_summary">Select the maps application</string>
+    <string name="pref_user_name">Set username</string>
+    <string name="pref_user_name_summary">Set your username</string>
+     
+    <string name="pref_user_profile">User Profile</string>
+    <string name="pref_update_setting">Update Settings</string>
+    <string name="send_toast_service_url">http://youhelp.cloudapp.net/YouHelpService.svc/sendtoast</string>
+    <string name="app_id">531384416976939</string>
+    
+</resources>

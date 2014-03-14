@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="mapsApplications">
+        <item name="1">Waze</item>
+        <item name="2">Google Maps</item>
+    </string-array>
+    <string-array name="mapsApplicationsValues">
+        <item name="1">1</item>
+        <item name="2">2</item>
+    </string-array>
+    <string-array name="action_list">
+        <item>Google Maps</item>
+        <item>Waze</item>
+    </string-array> 
+</resources>
