@@ -58,7 +58,6 @@ public class MainActivity extends FragmentActivity implements
 		GooglePlayServicesClient.OnConnectionFailedListener,
 		LocationListener
 {
-
 	private String SENDER_ID = "304926128006";
 	private GoogleCloudMessaging gcm;
 	private NotificationHub hub;
@@ -563,6 +562,10 @@ public class MainActivity extends FragmentActivity implements
 		meMarker.showInfoWindow();
 
 	}
-	
 
+	public void onClick_ViewMessages(View v){
+		Intent intent = new Intent(MainActivity.this, ChatUsersActivity.class);
+		startActivity(intent);
+	}
+	
 }
