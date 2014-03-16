@@ -10,6 +10,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -29,13 +30,23 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 	private NotificationManager mNotificationManager;
 	NotificationCompat.Builder builder;
 	Context ctx;	
+	MainActivity mainActivity;
+	String userId; 
+	
+	public MyBroadcastReceiver(MainActivity activity){
+		this.mainActivity = activity;
+	}
+	
+	public void setUserID(String userID){
+		this.userId = userID;
+	}
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		
 		try{
 			Log.d(TAG, intent.getAction());
-
+			
 			if( !intent.getAction().equals("com.google.android.c2dm.intent.RECEIVE")) 
 				return;
 			
@@ -83,9 +94,13 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 				case 2: // Google Maps
 				{
 					StringBuilder sb = new StringBuilder("geo:0,0?q=");
-					sb.append(tokens[0]);
-					sb.append(",");
-					sb.append(tokens[1]);
+					String strCoords = tokens[0] + "," + tokens[1];
+					
+//					sb.append(tokens[0]);
+//					sb.append(",");
+//					sb.append(tokens[1]);
+					
+					sb.append(strCoords);
 					sb.append("(Reported Place)");
 					
 					String url = sb.toString();
@@ -98,6 +113,18 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 					gmIntent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
 					gmIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					context.startActivity(gmIntent);
+
+					if( mainActivity != null ){
+						Location location = new Location("");
+	//					location.setLatitude(Float.parseFloat(tokens[0])); 
+	//					location.setLongitude(Float.parseFloat(tokens[1]));
+						
+						location.setLatitude(32.072072072072); 
+						location.setLongitude(34.871628036643);
+						
+						mainActivity.showReportedPlace(location);
+					}
+
 				}
 				break;
 				

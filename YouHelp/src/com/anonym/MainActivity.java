@@ -34,6 +34,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.animation.LayoutTransition;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -41,11 +42,15 @@ import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.SpinnerAdapter;
 import android.widget.Toast;
@@ -64,6 +69,8 @@ public class MainActivity extends FragmentActivity implements
 	private LocationClient locationClient;
 	private String userid = "1267167108";
 	
+	MyBroadcastReceiver mReceiver;
+	
 	private GoogleMap mMap;
 	
 	private static final int RESULT_SETTINGS = 1;
@@ -78,7 +85,12 @@ public class MainActivity extends FragmentActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+
+		this.mReceiver = new MyBroadcastReceiver(this);
+		this.mReceiver.setUserID(userid);
+		registerReceiver(this.mReceiver, 
+				         new IntentFilter("com.google.android.c2dm.intent.RECEIVE"));
+
 		// start Facebook Login
 //		try{
 //			Session.openActiveSession(this, true, new Session.StatusCallback() {
@@ -146,6 +158,18 @@ public class MainActivity extends FragmentActivity implements
 					
 					if( isNetworkAvailable() ) {
 					
+						ViewGroup mContainerView = (ViewGroup) findViewById(R.id.main_layout);
+						LayoutTransition lt = new LayoutTransition();
+						lt.disableTransitionType(LayoutTransition.CHANGING);
+						mContainerView.setLayoutTransition(lt);
+
+						View chatLayout = findViewById(R.id.chatGlanceLayoyt);
+						chatLayout.setVisibility(View.VISIBLE);
+						
+						//Animation vanish = AnimationUtils.loadAnimation(MainActivity.this,
+						//												R.anim.vanish);
+						//findViewById(R.id.chatGlanceLayoyt).startAnimation(vanish);
+						
 						Location currentLocation = locationClient.getLastLocation();
 						
 						Intent intent = new Intent(MainActivity.this, SendActivity.class);
@@ -178,6 +202,21 @@ public class MainActivity extends FragmentActivity implements
 		mMap.setBuildingsEnabled(true);	
 
 		Log.i(TAG, "UI set");
+		
+//		Intent thisIntent = getIntent();
+//		Bundle bundle = thisIntent.getExtras();
+//		if( bundle != null){
+//			String locationURL = bundle.getString("reportedLocationUrl");
+//			if( locationURL != null ) {
+//				Location location = new Location("");
+//				String[] tokens = locationURL.split(",");
+////				location.setLatitude(Float.parseFloat(tokens[0])); 
+////				location.setLongitude(Float.parseFloat(tokens[1]));
+//				location.setLatitude(32.072072072072); 
+//				location.setLongitude(34.871628036643);
+//				this.showReportedPlace(location);
+//			}
+//		}
 		
 		LocationManager locationManager = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
 		
@@ -216,6 +255,41 @@ public class MainActivity extends FragmentActivity implements
 		}
 			
 
+	}
+	
+	 @Override
+	 protected void onStart() {
+		 super.onStart();
+		 
+	     // Connect the client.
+		 if( locationClient != null )
+			 locationClient.connect();
+	 }
+	
+	@Override
+	protected void onResume(){
+		
+		//ensureMap();
+		checkPlayServices();
+		
+		super.onResume();
+	}
+
+	 
+	@Override
+	protected void onStop() {
+
+		// Disconnecting the client invalidates it.
+		if( locationClient != null )
+			locationClient.disconnect();
+		
+		super.onStop();
+	}
+	
+	@Override
+	protected void onDestroy(){
+		
+		unregisterReceiver(this.mReceiver);
 	}
 	
 	@Override
@@ -423,32 +497,7 @@ public class MainActivity extends FragmentActivity implements
 	   }.execute(null, null, null);
 	}
 	
-	@Override
-	protected void onResume(){
-		super.onResume();
-		
-		//ensureMap();
-		checkPlayServices();
-	}
-	
-	 @Override
-	 protected void onStart() {
-		 super.onStart();
-		 
-	     // Connect the client.
-		 if( locationClient != null )
-			 locationClient.connect();
-	 }
-	 
-	@Override
-	protected void onStop() {
-		        
-		// Disconnecting the client invalidates it.
-		if( locationClient != null )
-			locationClient.disconnect();
-		
-		super.onStop();
-	}
+
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -534,11 +583,25 @@ public class MainActivity extends FragmentActivity implements
 	}
 
 	private void showME(Location location){
+
+		Location tempLoc = new Location("");
+		tempLoc.setLatitude(32.072072072);
+		tempLoc.setLongitude(34.871628036);
+		//showMarker(tempLoc, "She is there", "", BitmapDescriptorFactory.HUE_RED);
+
+		showMarker(location, "You are here", "Say something", BitmapDescriptorFactory.HUE_AZURE);
+	}
+	
+	public void showReportedPlace(Location location){
+		showMarker(location, "Reportred place", "One", BitmapDescriptorFactory.HUE_ROSE);
+	}
+	
+	private void showMarker(Location location, String title, String snippet,  float color){
 		if( location == null ) {
-			Log.i(TAG, "Location passed to showME() is invalid");
+			Log.i(TAG, "Location passed to showMarker() is invalid");
 			return;
 		}else if( mMap == null ) {
-			Log.i(TAG, "Map is not ready when calling to showMe()");
+			Log.i(TAG, "Map is not ready when calling to showMarker()");
 			return;
 		}
 	
@@ -551,16 +614,15 @@ public class MainActivity extends FragmentActivity implements
 		
 		// Zoom in, animating the camera.
 		mMap.animateCamera(CameraUpdateFactory.zoomIn());
-		// Zoom out to zoom level 10, animating with a duration of 2 seconds.
+		// Zoom out to specified zoom level, animating with a duration of 2 seconds.
 		mMap.animateCamera(CameraUpdateFactory.zoomTo(zoomLevel), 2000, null);
 		
 		Marker meMarker = mMap.addMarker(new MarkerOptions()
         		.position(ME)
-        		.title("You are here")
-        		.snippet("Say something")
-        		.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-		meMarker.showInfoWindow();
-
+        		.title(title)
+        		.snippet(snippet)
+        		.icon(BitmapDescriptorFactory.defaultMarker(color)));
+		meMarker.showInfoWindow();	
 	}
 
 	public void onClick_ViewMessages(View v){
