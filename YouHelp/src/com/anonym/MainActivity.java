@@ -30,6 +30,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.animation.LayoutTransition;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
@@ -38,6 +39,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -60,7 +62,7 @@ public class MainActivity extends FragmentActivity implements
 	private GoogleCloudMessaging gcm;
 	private NotificationHub hub;
 	private LocationClient locationClient;
-	private String userid = "1267167108";
+	//private String userid = "1267167108";
 	
 	MyBroadcastReceiver mReceiver;
 	
@@ -80,7 +82,6 @@ public class MainActivity extends FragmentActivity implements
 		setContentView(R.layout.activity_main);
 
 		this.mReceiver = new MyBroadcastReceiver(this);
-		this.mReceiver.setUserID(userid);
 		registerReceiver(this.mReceiver, 
 				         new IntentFilter("com.google.android.c2dm.intent.RECEIVE"));
 
@@ -170,7 +171,11 @@ public class MainActivity extends FragmentActivity implements
 						b.putParcelable("currentLocation", currentLocation);
 
 						intent.putExtras(b);
-						intent.putExtra("userid", userid);
+						
+						SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+						String prefUserID = sharedPrefs.getString("prefUsername", "");
+						
+						intent.putExtra("userid", prefUserID);
 						startActivity(intent);
 					}
 					else {
