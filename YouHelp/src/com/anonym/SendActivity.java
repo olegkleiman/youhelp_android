@@ -11,7 +11,6 @@ import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.Button;
 
@@ -66,8 +65,8 @@ public class SendActivity extends Activity {
 			
 			String uri = sb.toString();
 			
-			TelephonyManager tMngr = (TelephonyManager)this.getSystemService(Context.TELEPHONY_SERVICE);
-			String phoneNuber = tMngr.getLine1Number();
+//			TelephonyManager tMngr = (TelephonyManager)this.getSystemService(Context.TELEPHONY_SERVICE);
+//			String phoneNuber = tMngr.getLine1Number();
 			
 			new PerformCheckInAsyncTask().execute(uri);
 			

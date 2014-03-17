@@ -5,11 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import com.facebook.Request;
-import com.facebook.Response;
 import com.facebook.Session;
-import com.facebook.SessionState;
-import com.facebook.model.GraphUser;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -39,7 +35,6 @@ import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -49,8 +44,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.SpinnerAdapter;
 import android.widget.Toast;
@@ -71,7 +64,7 @@ public class MainActivity extends FragmentActivity implements
 	
 	MyBroadcastReceiver mReceiver;
 	
-	private GoogleMap mMap;
+	private GoogleMap gMap;
 	
 	private static final int RESULT_SETTINGS = 1;
 	
@@ -137,7 +130,7 @@ public class MainActivity extends FragmentActivity implements
 		OnNavigationListener mOnNavigationListener = new OnNavigationListener() {
 			
 			// Get the same strings provided for the drop-down's ArrayAdapter
-			String[] strings = getResources().getStringArray(R.array.action_list);
+			//String[] strings = getResources().getStringArray(R.array.action_list);
 			
 			  @Override
 			  public boolean onNavigationItemSelected(int position, long itemId) {
@@ -197,9 +190,9 @@ public class MainActivity extends FragmentActivity implements
 			}
 
 		};
-		mMap.setOnInfoWindowClickListener(mapClickListener);
-		mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);	
-		mMap.setBuildingsEnabled(true);	
+		gMap.setOnInfoWindowClickListener(mapClickListener);
+		gMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);	
+		gMap.setBuildingsEnabled(true);	
 
 		Log.i(TAG, "UI set");
 		
@@ -220,11 +213,11 @@ public class MainActivity extends FragmentActivity implements
 		
 		LocationManager locationManager = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
 		
-		// Bound to updates to at most 30 min. and for 
-		// geographical accuracies of more that 500 meters
+		// Bound to updates to at most 3 sec. and for 
+		// geographical accuracies of more that 300 meters
 		locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 
-											  30 * 60 * 1000, 
-											  500,
+											  3 * 1000, 
+											  300,
 											  this);
 		
 		Log.i(TAG, "Location listener is set");
@@ -288,8 +281,9 @@ public class MainActivity extends FragmentActivity implements
 	
 	@Override
 	protected void onDestroy(){
-		
+
 		unregisterReceiver(this.mReceiver);
+		super.onDestroy();
 	}
 	
 	@Override
@@ -302,8 +296,11 @@ public class MainActivity extends FragmentActivity implements
 		
 		Log.i(TAG, "Registered with Notification Hub");
 
-		if( currentLocation != null)
-			showME(currentLocation);
+		if( currentLocation != null){
+			
+			setMyLocation(currentLocation);
+			showLocations();
+		}
  
 	}
 
@@ -337,7 +334,8 @@ public class MainActivity extends FragmentActivity implements
 		        
 				Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
 				
-				showME(location);
+				setMyLocation(location);
+				showLocations();
 			}
 
 		}catch(Exception ex){
@@ -386,11 +384,11 @@ public class MainActivity extends FragmentActivity implements
 	@SuppressLint("NewApi")
 	private void ensureMap() {
 	    // Do a null check to confirm that we have not already instantiated the map.
-	    if (mMap == null) {
-	        mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
+	    if (gMap == null) {
+	        gMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
 	                            .getMap();
 	        // Check if we were successful in obtaining the map.
-	        if (mMap != null) {
+	        if (gMap != null) {
 	            // The Map is verified. It is now safe to manipulate the map.
 
 	        }
@@ -582,25 +580,58 @@ public class MainActivity extends FragmentActivity implements
         }
 	}
 
+	public void showLocations(){
+		
+		gMap.clear();
+		
+		if( myLocation != null )
+			showME(myLocation);
+		
+		if( reportedLocations != null) {
+			for(ReportedPlace place: reportedLocations){
+				showReportedPlace(place, place.getSnippet());
+		}}
+	}
+	
+	private Location myLocation = new Location("");
+	private ArrayList<ReportedPlace> reportedLocations = new ArrayList<ReportedPlace>();
+	
+	public void setMyLocation(Location location){
+		myLocation = location;
+	}
+	
+	public Location getMyLocation(){
+		return myLocation;
+	}
+	
+	public void addReportedLocation(Location location, String title){
+		
+		if( reportedLocations != null){
+			ReportedPlace place = new ReportedPlace(location);
+			place.setSnippet(title);
+			reportedLocations.add(place);
+		}
+	}
+	
 	private void showME(Location location){
-
-		Location tempLoc = new Location("");
-		tempLoc.setLatitude(32.072072072);
-		tempLoc.setLongitude(34.871628036);
+		
+//		Location tempLoc = new Location("");
+//		tempLoc.setLatitude(32.072072072);
+//		tempLoc.setLongitude(34.871628036);
 		//showMarker(tempLoc, "She is there", "", BitmapDescriptorFactory.HUE_RED);
 
 		showMarker(location, "You are here", "Say something", BitmapDescriptorFactory.HUE_AZURE);
 	}
 	
-	public void showReportedPlace(Location location){
-		showMarker(location, "Reportred place", "One", BitmapDescriptorFactory.HUE_ROSE);
+	private void showReportedPlace(Location location, String snippet){
+		showMarker(location, "Reported place", snippet, BitmapDescriptorFactory.HUE_ROSE);
 	}
 	
 	private void showMarker(Location location, String title, String snippet,  float color){
 		if( location == null ) {
 			Log.i(TAG, "Location passed to showMarker() is invalid");
 			return;
-		}else if( mMap == null ) {
+		}else if( gMap == null ) {
 			Log.i(TAG, "Map is not ready when calling to showMarker()");
 			return;
 		}
@@ -610,14 +641,14 @@ public class MainActivity extends FragmentActivity implements
 		
 		final int zoomLevel = 16;
 		// Move the camera instantly to the current location with a zoom.
-		mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ME, zoomLevel));
+		gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ME, zoomLevel));
 		
 		// Zoom in, animating the camera.
-		mMap.animateCamera(CameraUpdateFactory.zoomIn());
+		gMap.animateCamera(CameraUpdateFactory.zoomIn());
 		// Zoom out to specified zoom level, animating with a duration of 2 seconds.
-		mMap.animateCamera(CameraUpdateFactory.zoomTo(zoomLevel), 2000, null);
+		gMap.animateCamera(CameraUpdateFactory.zoomTo(zoomLevel), 2000, null);
 		
-		Marker meMarker = mMap.addMarker(new MarkerOptions()
+		Marker meMarker = gMap.addMarker(new MarkerOptions()
         		.position(ME)
         		.title(title)
         		.snippet(snippet)

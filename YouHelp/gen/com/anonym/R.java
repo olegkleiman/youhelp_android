@@ -621,10 +621,10 @@ containing a value of this type.
         public static final int hello_world=0x7f080035;
         public static final int hint=0x7f080036;
         public static final int menu_settings=0x7f080037;
+        public static final int pref_map_apps=0x7f08003b;
+        public static final int pref_map_apps_summary=0x7f08003c;
         public static final int pref_send_report=0x7f080039;
         public static final int pref_send_report_summary=0x7f08003a;
-        public static final int pref_sync_frequency=0x7f08003b;
-        public static final int pref_sync_frequency_summary=0x7f08003c;
         public static final int pref_update_setting=0x7f080040;
         public static final int pref_user_name=0x7f08003d;
         public static final int pref_user_name_summary=0x7f08003e;

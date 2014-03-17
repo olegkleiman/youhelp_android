@@ -19,9 +19,6 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
-import android.content.Context;
-import android.content.Intent;
-
 public class MyBroadcastReceiver extends BroadcastReceiver {
 
 	private static final String TAG = "MyBroadcastReceiver";
@@ -68,8 +65,15 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 			if( sharedPrefs == null )
 				return;
 
+			String prefUserID = sharedPrefs.getString("prefUsername", "");
+			// Do not receive from yourself
+			if( prefUserID.length() != 0
+				&& prefUserID.equals(userid) ) { // current user == sending user
+					return;
+			}
+			
 			// Assume Google Maps as default
-			String strMapAppCode = sharedPrefs.getString("prefSyncFrequency", "2");
+			String strMapAppCode = sharedPrefs.getString("prefMapApps", "2");
 			int mapCode = Integer.parseInt(strMapAppCode);
 
 			switch( mapCode )
@@ -94,13 +98,11 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 				case 2: // Google Maps
 				{
 					StringBuilder sb = new StringBuilder("geo:0,0?q=");
-					String strCoords = tokens[0] + "," + tokens[1];
+//					String strCoords = tokens[0] + "," + tokens[1];
 					
-//					sb.append(tokens[0]);
-//					sb.append(",");
-//					sb.append(tokens[1]);
-					
-					sb.append(strCoords);
+					sb.append(tokens[0]);
+					sb.append(",");
+					sb.append(tokens[1]);
 					sb.append("(Reported Place)");
 					
 					String url = sb.toString();
@@ -122,7 +124,9 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 						location.setLatitude(32.072072072072); 
 						location.setLongitude(34.871628036643);
 						
-						mainActivity.showReportedPlace(location);
+						mainActivity.addReportedLocation(location, title);
+						mainActivity.showLocations();
+
 					}
 
 				}

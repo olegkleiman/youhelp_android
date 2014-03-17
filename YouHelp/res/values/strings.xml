@@ -11,8 +11,8 @@
      
     <string name="pref_send_report">Send crash reports</string>
     <string name="pref_send_report_summary">Helps to fix bugs</string>
-    <string name="pref_sync_frequency">Maps Applications</string>
-    <string name="pref_sync_frequency_summary">Select the maps application</string>
+    <string name="pref_map_apps">Maps Applications</string>
+    <string name="pref_map_apps_summary">Select the maps application</string>
     <string name="pref_user_name">Set username</string>
     <string name="pref_user_name_summary">Set your username</string>
      

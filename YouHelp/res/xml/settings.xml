@@ -17,11 +17,11 @@
         </CheckBoxPreference>
  
         <ListPreference
-            android:key="prefSyncFrequency"
+            android:key="prefMapApps"
             android:entries="@array/mapsApplications"
-            android:summary="@string/pref_sync_frequency_summary"
+            android:summary="@string/pref_map_apps_summary"
             android:entryValues="@array/mapsApplicationsValues"
-            android:title="@string/pref_sync_frequency" />
+            android:title="@string/pref_map_apps" />
     </PreferenceCategory>
  
 </PreferenceScreen>

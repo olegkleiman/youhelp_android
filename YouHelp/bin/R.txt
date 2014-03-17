@@ -260,10 +260,10 @@ int string common_signin_button_text_long 0x7f080013
 int string hello_world 0x7f080035
 int string hint 0x7f080036
 int string menu_settings 0x7f080037
+int string pref_map_apps 0x7f08003b
+int string pref_map_apps_summary 0x7f08003c
 int string pref_send_report 0x7f080039
 int string pref_send_report_summary 0x7f08003a
-int string pref_sync_frequency 0x7f08003b
-int string pref_sync_frequency_summary 0x7f08003c
 int string pref_update_setting 0x7f080040
 int string pref_user_name 0x7f08003d
 int string pref_user_name_summary 0x7f08003e
