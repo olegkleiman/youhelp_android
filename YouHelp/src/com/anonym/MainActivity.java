@@ -78,7 +78,24 @@ public class MainActivity extends FragmentActivity implements
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
+		
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		String prefUserID = sharedPrefs.getString("prefUsername", "");
+		
+		if(prefUserID.length() == 0 ){
+			
+			try{
+				Intent intent = new Intent(this, RegisterWizard1.class);
+				startActivity(intent);
+			} catch(Exception ex){
+				ex.printStackTrace();
+			}
+			
+			return;
+		}
+		
 		setContentView(R.layout.activity_main);
 
 		this.mReceiver = new MyBroadcastReceiver(this);
