@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+   	<TextView
+	        android:id="@+id/textView1"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="Select Registration Method"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+    
+    <RadioGroup
+        	android:layout_weight="6"
+        	android:layout_width="match_parent"
+	        android:layout_height="wrap_content">
+ 
+	    <RadioButton
+	        android:id="@+id/rbCreateUser"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:onClick="onRadioButtonClicked"
+	        android:text="Create New User" />
+
+	    <RadioButton
+	        android:id="@+id/rbSignFacebook"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:onClick="onRadioButtonClicked"
+	        android:text="Sign with Facebook" />
+	</RadioGroup>
+	
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:baselineAligned="false"
+        android:gravity="end"
+        android:orientation="vertical" >
+            
+        <Button
+            android:id="@+id/btnRegister1Next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|center_horizontal|end"
+            android:onClick="onNext"
+            android:text="Next" >
+            
+        </Button>        
+    </LinearLayout>
+    
+</LinearLayout>
