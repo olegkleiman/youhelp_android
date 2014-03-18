@@ -1,3 +1,6 @@
 youhelp_android
 ===============
 FB ID 1267167108 is used by default in the initial version
+
+Images (numbers) were taken from https://github.com/olegkleiman/youhelp_android/blob/master/README.md
+
