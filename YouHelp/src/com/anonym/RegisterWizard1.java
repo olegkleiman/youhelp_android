@@ -33,6 +33,25 @@ public class RegisterWizard1 extends Activity {
 	
 	public void onNext(View view) {
 		Intent intent = new Intent(this, RegisterWizard_CreateNewUser.class);
-		startActivity(intent);
+		startActivityForResult(intent, 1);
+	}
+	
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == 1) {
+			
+		    if(resultCode == RESULT_OK){      
+		         String username = data.getStringExtra("username");  
+		         
+		         Intent returnIntent = new Intent();
+		         returnIntent.putExtra("username", username);
+		         setResult(RESULT_OK,returnIntent); 
+		         
+		         finish();
+		     }
+		     if (resultCode == RESULT_CANCELED) {    
+		         //Write your code if there's no result
+		     }
+
+		}
 	}
 }

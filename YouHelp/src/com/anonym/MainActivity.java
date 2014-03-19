@@ -80,23 +80,22 @@ public class MainActivity extends FragmentActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
 		
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		String prefUserID = sharedPrefs.getString("prefUsername", "");
-		
+
 		if(prefUserID.length() == 0 ){
 			
 			try{
 				Intent intent = new Intent(this, RegisterWizard1.class);
-				startActivity(intent);
+				startActivityForResult(intent, 1);
 			} catch(Exception ex){
 				ex.printStackTrace();
 			}
 			
 			return;
 		}
-		
-		setContentView(R.layout.activity_main);
 
 		this.mReceiver = new MyBroadcastReceiver(this);
 		registerReceiver(this.mReceiver, 
@@ -217,21 +216,6 @@ public class MainActivity extends FragmentActivity implements
 		gMap.setBuildingsEnabled(true);	
 
 		Log.i(TAG, "UI set");
-		
-//		Intent thisIntent = getIntent();
-//		Bundle bundle = thisIntent.getExtras();
-//		if( bundle != null){
-//			String locationURL = bundle.getString("reportedLocationUrl");
-//			if( locationURL != null ) {
-//				Location location = new Location("");
-//				String[] tokens = locationURL.split(",");
-////				location.setLatitude(Float.parseFloat(tokens[0])); 
-////				location.setLongitude(Float.parseFloat(tokens[1]));
-//				location.setLatitude(32.072072072072); 
-//				location.setLongitude(34.871628036643);
-//				this.showReportedPlace(location);
-//			}
-//		}
 		
 		LocationManager locationManager = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
 		
@@ -399,8 +383,14 @@ public class MainActivity extends FragmentActivity implements
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
       super.onActivityResult(requestCode, resultCode, data);
-      if( Session.getActiveSession() != null )
-    	  Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
+      
+      if( requestCode == 1) { // QuickBlox
+      
+      }
+      else if( requestCode == 2) { // Check FB Session
+	      if( Session.getActiveSession() != null )
+	    	  Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
+      }
     }
 	
 	@SuppressLint("NewApi")
