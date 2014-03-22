@@ -1,10 +1,13 @@
 package com.anonym;
 
+import java.util.Date;
+
 public class YHMessage {
 
 	private long id;
 	private String Content;
 	private String UserID;
+	private Date DateCreated;
 	
 	public long getId(){
 		return id;
@@ -28,6 +31,14 @@ public class YHMessage {
 	
 	public void setUserID(String userID){
 		this.UserID = userID;
+	}
+	
+	public Date getDateCreated(){
+		return DateCreated;
+	}
+	
+	public void setDateCreated(Date date){
+		DateCreated = date;
 	}
 	
 	@Override

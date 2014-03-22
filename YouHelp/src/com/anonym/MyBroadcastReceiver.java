@@ -1,5 +1,7 @@
 package com.anonym;
 
+import java.util.Date;
+
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import android.app.Activity;
@@ -40,6 +42,26 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 		this.userId = userID;
 	}
 	
+	private void persistMessage(Context context, String content, String userid){
+
+		try{
+		if( datasource == null)
+			datasource = new YHDataSource(mainActivity);
+		
+		datasource.open();
+		 
+		Date date = new Date();
+		datasource.createYHMessage(content, userid, date);
+		datasource.close();
+		
+		}catch(Exception ex){
+			
+			Toast.makeText(context, ex.getMessage(), Toast.LENGTH_LONG).show();
+
+		}
+		
+	}
+	
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		
@@ -74,12 +96,8 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 					return;
 			}
 			
-			datasource = new YHDataSource(mainActivity);
-			datasource.open();
-			datasource.createYHMessage(title);
-			datasource.close();
-			
-			
+			persistMessage(context, title, userid);
+
 			// Assume Google Maps as default
 			String strMapAppCode = sharedPrefs.getString("prefMapApps", "2");
 			int mapCode = Integer.parseInt(strMapAppCode);

@@ -1,6 +1,8 @@
 package com.anonym;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.content.ContentValues;
@@ -13,7 +15,9 @@ public class YHDataSource {
 	private SQLiteDatabase database;
 	private YHSQLiteHelper dbHelper;
 	private String[] allColumns = { YHSQLiteHelper.COLUMN_ID, 
-							YHSQLiteHelper.COLUMN_CONTENT };
+							YHSQLiteHelper.COLUMN_CONTENT,
+							YHSQLiteHelper.COLUMN_USERID,
+							YHSQLiteHelper.COLUMN_DATECREATED };
 	
 	public YHDataSource(Context context){
 		dbHelper = new YHSQLiteHelper(context);
@@ -27,10 +31,17 @@ public class YHDataSource {
 		dbHelper.close();
 	}
 	
-	public YHMessage createYHMessage(String content){
+	public YHMessage createYHMessage(String content, 
+									String userid, 
+									Date dateCreated){
 		
 		ContentValues values = new ContentValues();
 		values.put(YHSQLiteHelper.COLUMN_CONTENT, content);
+		values.put(YHSQLiteHelper.COLUMN_USERID, userid);
+		
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		values.put(YHSQLiteHelper.COLUMN_DATECREATED, dateFormat.format(dateCreated));
+		
 		long insertID = database.insert(YHSQLiteHelper.TABLE_MESSAGES, null, values);
 		
 		Cursor cursor = database.query(YHSQLiteHelper.TABLE_MESSAGES, allColumns,
@@ -43,9 +54,14 @@ public class YHDataSource {
 		return newMessage;
 	}
 	
+	public void deleteYHMessage(YHMessage message){
+		long id = message.getId();
+		database.delete(YHSQLiteHelper.TABLE_MESSAGES, 
+				YHSQLiteHelper.COLUMN_ID + " = " + id, null);
+	}
+	
 	public List<YHMessage> getAllMessages() {
 		List<YHMessage> messages = new ArrayList<YHMessage>();
-		
 		
 		Cursor cursor = database.query(YHSQLiteHelper.TABLE_MESSAGES,
 										allColumns, null, null, null, null, null);
@@ -62,9 +78,13 @@ public class YHDataSource {
 	}
 	
 	private YHMessage cursorToYHMessage(Cursor cursor){
+		
 		YHMessage message = new YHMessage();
 		message.setId(cursor.getLong(0));
 		message.setContent(cursor.getString(1));
+		message.setUserID(cursor.getString(2));
+		Date date = new Date(cursor.getLong(3)*1000);
+		message.setDateCreated(date);
 		
 		return message;
 	}
