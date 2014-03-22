@@ -548,7 +548,7 @@ public class MainActivity extends FragmentActivity implements
 									 loc.getLongitude(),
 									 1);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 			return null;
 		} catch(IllegalArgumentException e2){

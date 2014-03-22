@@ -68,7 +68,9 @@ public class SendActivity extends Activity {
 //			TelephonyManager tMngr = (TelephonyManager)this.getSystemService(Context.TELEPHONY_SERVICE);
 //			String phoneNuber = tMngr.getLine1Number();
 			
-			new PerformCheckInAsyncTask().execute(uri);
+			PerformCheckInAsyncTask sendTask = new PerformCheckInAsyncTask();
+			sendTask.ParentActivity = this;
+			sendTask.execute(uri);
 			
 			finish();
 		}

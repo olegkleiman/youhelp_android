@@ -30,6 +30,8 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 	MainActivity mainActivity;
 	String userId; 
 	
+	private YHDataSource datasource;
+	
 	public MyBroadcastReceiver(MainActivity activity){
 		this.mainActivity = activity;
 	}
@@ -71,6 +73,12 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 				&& prefUserID.equals(userid) ) { // current user == sending user
 					return;
 			}
+			
+			datasource = new YHDataSource(mainActivity);
+			datasource.open();
+			datasource.createYHMessage(title);
+			datasource.close();
+			
 			
 			// Assume Google Maps as default
 			String strMapAppCode = sharedPrefs.getString("prefMapApps", "2");

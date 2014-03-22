@@ -510,7 +510,7 @@ containing a value of this type.
     }
     public static final class string {
         public static final int action_settings=0x7f080034;
-        public static final int app_id=0x7f080042;
+        public static final int app_id=0x7f080044;
         public static final int app_name=0x7f080033;
         /**   Title for notification shown when GooglePlayServices needs to be
         enabled for a application to work. [CHAR LIMIT=70] 
@@ -633,17 +633,19 @@ containing a value of this type.
         public static final int common_signin_button_text_long=0x7f080013;
         public static final int hello_world=0x7f080035;
         public static final int hint=0x7f080036;
-        public static final int menu_settings=0x7f080037;
-        public static final int pref_map_apps=0x7f08003b;
-        public static final int pref_map_apps_summary=0x7f08003c;
-        public static final int pref_send_report=0x7f080039;
-        public static final int pref_send_report_summary=0x7f08003a;
-        public static final int pref_update_setting=0x7f080040;
-        public static final int pref_user_name=0x7f08003d;
-        public static final int pref_user_name_summary=0x7f08003e;
-        public static final int pref_user_profile=0x7f08003f;
-        public static final int send_toast_service_url=0x7f080041;
-        public static final int title_activity_main=0x7f080038;
+        public static final int menu_settings=0x7f080039;
+        public static final int pref_map_apps=0x7f08003d;
+        public static final int pref_map_apps_summary=0x7f08003e;
+        public static final int pref_send_report=0x7f08003b;
+        public static final int pref_send_report_summary=0x7f08003c;
+        public static final int pref_update_setting=0x7f080042;
+        public static final int pref_user_name=0x7f08003f;
+        public static final int pref_user_name_summary=0x7f080040;
+        public static final int pref_user_profile=0x7f080041;
+        public static final int radio_createnew=0x7f080037;
+        public static final int radio_fbLogin=0x7f080038;
+        public static final int send_toast_service_url=0x7f080043;
+        public static final int title_activity_main=0x7f08003a;
     }
     public static final class style {
         /** 

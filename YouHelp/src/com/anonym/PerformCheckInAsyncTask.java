@@ -11,12 +11,14 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 
+import android.app.Activity;
 import android.location.Location;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 public class PerformCheckInAsyncTask extends AsyncTask<String, String, String> {
 
-	public MainActivity activity;
+	public Activity ParentActivity;
 	public PerformCheckInAsyncTask()
 	{}
 	
@@ -54,8 +56,22 @@ public class PerformCheckInAsyncTask extends AsyncTask<String, String, String> {
    	 		}
 
    	 	}
-   	 	catch(Exception ex){
-   	 		ex.printStackTrace();
+   	 	catch(final Exception ex){
+   	 		
+   	 		try{
+   	 			if( ParentActivity != null) {
+   	 			
+   	 			ParentActivity.runOnUiThread(new Runnable() {
+   	 					public void run() {
+   	 						Toast.makeText(ParentActivity, ex.getMessage(), Toast.LENGTH_SHORT).show();
+   	 				}});
+
+   	 			}
+   	 		}
+   	        catch(Exception e){
+   	 		
+   	        	e.printStackTrace();
+   	        }
 		}
    	 	
    	 	return responseString;

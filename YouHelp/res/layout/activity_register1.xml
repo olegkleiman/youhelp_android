@@ -12,6 +12,8 @@
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
     
     <RadioGroup
+        	android:layout_marginTop="62dip"
+        	android:layout_marginLeft="24dip"
         	android:layout_weight="6"
         	android:layout_width="match_parent"
 	        android:layout_height="wrap_content">
@@ -21,14 +23,17 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:onClick="onRadioButtonClicked"
-	        android:text="Create New User" />
+	        android:checked="true"
+	        android:textAppearance="?android:attr/textAppearanceLarge" 
+	        android:text="@string/radio_createnew" />
 
 	    <RadioButton
 	        android:id="@+id/rbSignFacebook"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:onClick="onRadioButtonClicked"
-	        android:text="Sign with Facebook" />
+	        android:textAppearance="?android:attr/textAppearanceLarge" 
+	        android:text="@string/radio_fbLogin" />
 	</RadioGroup>
 	
     <LinearLayout

@@ -22,11 +22,11 @@ public class RegisterWizard1 extends Activity {
 	    switch(view.getId()) {
 	        case R.id.rbCreateUser:
 	            if (checked)
-	                // Pirates are the best
+	                // 
 	            break;
 	        case R.id.rbSignFacebook:
 	            if (checked)
-	                // Ninjas rule
+	                // 
 	            break;
 	    }
 	}
@@ -44,7 +44,7 @@ public class RegisterWizard1 extends Activity {
 		         
 		         Intent returnIntent = new Intent();
 		         returnIntent.putExtra("username", username);
-		         setResult(RESULT_OK,returnIntent); 
+		         setResult(RESULT_OK, returnIntent); 
 		         
 		         finish();
 		     }
