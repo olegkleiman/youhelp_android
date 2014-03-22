@@ -77,6 +77,24 @@ public class YHDataSource {
 		return messages;
 	}
 	
+	public List<YHMessage> getMessagesFromUser(String userid){
+		List<YHMessage> messages = new ArrayList<YHMessage>();
+		
+		Cursor cursor = database.query(YHSQLiteHelper.TABLE_MESSAGES,
+				allColumns,
+				YHSQLiteHelper.COLUMN_USERID + " = '" + userid + "'", null, null, null, null);
+		
+		cursor.moveToFirst();
+		while( !cursor.isAfterLast()){
+			YHMessage message = cursorToYHMessage(cursor);
+			messages.add(message);
+			cursor.moveToNext();
+		}
+		
+		cursor.close();
+		return messages;
+	}
+	
 	private YHMessage cursorToYHMessage(Cursor cursor){
 		
 		YHMessage message = new YHMessage();

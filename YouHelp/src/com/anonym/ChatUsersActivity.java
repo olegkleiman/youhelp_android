@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,12 +64,19 @@ public class ChatUsersActivity extends Activity {
            {
                 // argument position gives the index of item which is clicked
 				@Override
-				public void onItemClick(AdapterView<?> arg0, View v,int position, long arg3){
+				public void onItemClick(AdapterView<?> parent, View view,
+										int position, long id){
 						
 					YHMessage msg = messages.get(position);
                     Toast.makeText(getApplicationContext(), "Message Content : "+ msg.getContent(),   
                         		   			Toast.LENGTH_SHORT).show();
-                        
+                    
+                    Intent intent = new Intent(getApplicationContext(), 
+                    							ChatRoomActivity.class);
+                    String userid = msg.getUserId();
+                    intent.putExtra("userid", userid);
+                    startActivity(intent);
+      
                }
 
 
