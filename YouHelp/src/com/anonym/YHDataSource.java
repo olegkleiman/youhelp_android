@@ -77,7 +77,7 @@ public class YHDataSource {
 		return messages;
 	}
 	
-	public List<YHMessage> getMessagesFromUser(String userid){
+	public List<YHMessage> getMessagesOfUser(String userid){
 		List<YHMessage> messages = new ArrayList<YHMessage>();
 		
 		Cursor cursor = database.query(YHSQLiteHelper.TABLE_MESSAGES,

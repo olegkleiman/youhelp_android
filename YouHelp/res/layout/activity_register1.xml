@@ -8,7 +8,7 @@
 	        android:id="@+id/lblUserName"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:text="Select Registration Method"
+	        android:text="@string/register_1_title"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
     
     <RadioGroup
@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical|center_horizontal|end"
             android:onClick="onNext"
-            android:text="Next" >
+            android:text="@string/next_register_button_caption" >
             
         </Button>        
     </LinearLayout>

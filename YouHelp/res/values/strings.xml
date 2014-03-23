@@ -7,6 +7,9 @@
     <string name="hint">Hint</string>
 
     <string name="refresh_button_caption">Refresh</string>
+    <string name="sendmessage_button_caption">Send</string>
+    <string name="next_register_button_caption">Next</string>
+    <string name="register_1_title">Select Registration Method"</string>
     
     <string name="radio_createnew">Create New User</string>
     <string name="radio_fbLogin">Sign with Facebook</string>

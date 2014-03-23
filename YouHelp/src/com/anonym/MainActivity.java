@@ -395,7 +395,9 @@ public class MainActivity extends FragmentActivity implements
 	
 	@SuppressLint("NewApi")
 	private void ensureMap() {
-	    // Do a null check to confirm that we have not already instantiated the map.
+	    
+		try{
+		// Do a null check to confirm that we have not already instantiated the map.
 	    if (gMap == null) {
 	        gMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
 	                            .getMap();
@@ -405,6 +407,9 @@ public class MainActivity extends FragmentActivity implements
 
 	        }
 	    }
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
 	}
 	
     private boolean isNetworkAvailable() {
