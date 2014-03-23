@@ -4,10 +4,22 @@ import java.util.Date;
 
 public class YHMessage {
 
+	public int icon;
 	private long id;
 	private String Content;
 	private String UserID;
 	private Date DateCreated;
+	
+	public YHMessage(){
+		
+	}
+	
+	public YHMessage(int icon, String title){
+		super();
+		
+        this.icon = icon;
+        this.Content = title;
+	}
 	
 	public long getId(){
 		return id;

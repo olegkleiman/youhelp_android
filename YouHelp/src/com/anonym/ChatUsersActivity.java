@@ -1,6 +1,8 @@
 package com.anonym;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
@@ -50,7 +52,12 @@ public class ChatUsersActivity extends Activity {
 						YHMessage msg = messages.get(position);
 				    
 						text1.setText(msg.getContent());
-						text2.setText(msg.getUserId());
+						
+						SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+						Date dateCreated = msg.getDateCreated() ;
+
+						String text = "" +  dateFormat.format(dateCreated) + " " + msg.getUserId();
+						text2.setText(text);
 					
 						return view;
 
@@ -68,9 +75,7 @@ public class ChatUsersActivity extends Activity {
 										int position, long id){
 						
 					YHMessage msg = messages.get(position);
-                    Toast.makeText(getApplicationContext(), "Message Content : "+ msg.getContent(),   
-                        		   			Toast.LENGTH_SHORT).show();
-                    
+					
                     Intent intent = new Intent(getApplicationContext(), 
                     							ChatRoomActivity.class);
                     String userid = msg.getUserId();
@@ -78,7 +83,6 @@ public class ChatUsersActivity extends Activity {
                     startActivity(intent);
       
                }
-
 
            });
 	}

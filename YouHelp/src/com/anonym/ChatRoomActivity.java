@@ -22,19 +22,24 @@ public class ChatRoomActivity extends Activity {
 		String userid = extras.getString("userid");
 		
 		try{
-		if( datasource == null )
-			datasource = new YHDataSource(this);
+			
+			if( datasource == null )
+				datasource = new YHDataSource(this);
 		
-		datasource.open();
+			datasource.open();
 		
-		final List<YHMessage> messages = datasource.getMessagesFromUser(userid);
+			final List<YHMessage> messages = datasource.getMessagesFromUser(userid);
 		
+			ChatReplicaAdapter chatAdapter = new ChatReplicaAdapter(this, 
+					R.layout.chatroom_item_row,
+					messages);
 		
-		ArrayAdapter<YHMessage> adapter = new ArrayAdapter<YHMessage>(this,
-				android.R.layout.simple_list_item_1, 
-				messages);
+//			ArrayAdapter<YHMessage> adapter = new ArrayAdapter<YHMessage>(this,
+//				android.R.layout.simple_list_item_1, 
+//				messages);
 		
-		messagesList.setAdapter(adapter);
+			messagesList.setAdapter(chatAdapter);
+			
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}

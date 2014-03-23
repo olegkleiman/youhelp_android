@@ -87,6 +87,7 @@ public class YHDataSource {
 		cursor.moveToFirst();
 		while( !cursor.isAfterLast()){
 			YHMessage message = cursorToYHMessage(cursor);
+	
 			messages.add(message);
 			cursor.moveToNext();
 		}
