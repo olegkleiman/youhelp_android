@@ -124,12 +124,10 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 				case 2: // Google Maps
 				{
 					StringBuilder sb = new StringBuilder("geo:0,0?q=");
-//					String strCoords = tokens[0] + "," + tokens[1];
-					
 					sb.append(tokens[0]);
 					sb.append(",");
 					sb.append(tokens[1]);
-					sb.append("(Reported Place)");
+					sb.append("(" + title + " from " + userid + ")");
 					
 					String url = sb.toString();
 					
@@ -144,13 +142,13 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 
 					if( mainActivity != null ){
 						Location location = new Location("");
-	//					location.setLatitude(Float.parseFloat(tokens[0])); 
-	//					location.setLongitude(Float.parseFloat(tokens[1]));
+						location.setLatitude(Float.parseFloat(tokens[0])); 
+						location.setLongitude(Float.parseFloat(tokens[1]));
 						
-						location.setLatitude(32.072072072072); 
-						location.setLongitude(34.871628036643);
+						//location.setLatitude(32.072072072072); 
+						//location.setLongitude(34.871628036643);
 						
-						mainActivity.addReportedLocation(location, title);
+						mainActivity.addReportedLocation(location, title, userid);
 						mainActivity.showLocations();
 
 					}

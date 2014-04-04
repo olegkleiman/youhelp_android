@@ -4,13 +4,23 @@ import android.location.Location;
 
 public class ReportedPlace extends Location {
 
-	private String Snippet;
+	private String Title;
 	
-	public void setSnippet(String title){
-		Snippet = title;
+	public void setTitle(String title){
+		Title = title;
 	}
-	public String getSnippet(){
-		return Snippet;
+	public String getTitle(){
+		return Title;
+	}
+	
+	private String userid;
+	
+	public void setUserID(String userid){
+		this.userid = userid;
+	}
+	
+	public String getUserID(){
+		return userid;
 	}
 	
 	public ReportedPlace(Location location) {

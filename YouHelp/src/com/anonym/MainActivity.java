@@ -40,6 +40,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -58,8 +60,165 @@ public class MainActivity extends FragmentActivity implements
 		GooglePlayServicesClient.OnConnectionFailedListener,
 		LocationListener
 {
-	private String SENDER_ID = "304926128006";
-	private GoogleCloudMessaging gcm;
+	private class RegisterOnAzureHub extends AsyncTask<Object, Object, String>{
+
+		Activity thisActivity;
+		String gcmRegID;
+		List<String> tags;
+		
+		public RegisterOnAzureHub setGCMRegID(String regID) {
+			this.gcmRegID = regID;
+			return this;
+		}
+		
+		public RegisterOnAzureHub setTags(List<String> _tags){
+			this.tags = _tags;
+			return this;
+		}
+		
+		// return value from doInBackground passed here
+		@Override
+		protected void onPostExecute(String error){
+    	  	
+ 			if( error.length() > 0){
+ 				
+ 				AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(thisActivity);
+			
+ 				dlgAlert.setMessage(error);
+ 				dlgAlert.setTitle(TAG);
+ 				dlgAlert.setPositiveButton("OK", null);
+ 				dlgAlert.setCancelable(true);
+ 				dlgAlert.create().show();
+ 			}
+		}
+		
+		@Override
+		  protected String doInBackground(Object... params) {
+			  
+			  thisActivity = (Activity) params[0];
+  
+			 try{
+
+				 //hub.unregisterAll(gcmRegID);
+				 hub.register(gcmRegID, tags.toArray(new String[tags.size()]));
+				 
+				 StringBuilder sb = new StringBuilder();
+				 for(String tag: tags){
+					 sb.append(tag);
+				 }
+				 
+				 Log.i(TAG, "Registered on Notification Hub with following tags: " + sb.toString());
+				 
+			 }catch(Exception ex){
+				 
+				return "Failed to register with Azure Notification Hub. Exception: " + 	ex.getMessage();
+			 }
+		
+			 return "";
+		 }
+
+	}
+	
+	private class RegisterOnGCM extends AsyncTask<Activity, Object, String>{
+
+		private Activity activity;
+		private GoogleCloudMessaging gcm;
+		private String GCM_SENDER_ID = "304926128006";
+		public static final String GCM_PROPERTY_REG_ID = "registration_id";
+		
+		
+		@Override
+        protected void onPostExecute(String error) {
+			
+ 			if( error.length() > 0){
+ 				
+ 				AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(activity);
+			
+ 				dlgAlert.setMessage(error);
+ 				dlgAlert.setTitle(TAG);
+ 				dlgAlert.setPositiveButton("OK", null);
+ 				dlgAlert.setCancelable(true);
+ 				dlgAlert.create().show();
+ 			}
+        }
+		
+		@Override
+		protected String doInBackground(Activity... params) {
+			
+			String msg = "";
+			
+			this.activity = params[0];
+			
+			Context context = this.activity;
+			
+			this.gcm = GoogleCloudMessaging.getInstance(context);
+			
+			String gcmRegID = "";
+			
+			try {
+				
+				//gcm.unregister();
+				gcmRegID = gcm.register(GCM_SENDER_ID);
+				Log.i(TAG, "GCM Registration ID obtained: " + gcmRegID);
+				
+				storeRegistrationID(context, gcmRegID);
+				Log.i(TAG, "GCM Registration ID stored");
+	
+			} catch (IOException ex) {
+				return ex.getMessage();
+			}
+
+			return msg;
+		}
+		
+		private void storeRegistrationID(Context context, String regId){
+			
+			final SharedPreferences prefs = context.getSharedPreferences("GCM_PREFS", Context.MODE_PRIVATE);
+			int appVersion = getAppVersion(context);
+			Log.i(TAG, "Saving regId on app version " + appVersion);
+			
+			SharedPreferences.Editor editor = prefs.edit();
+			editor.putString(GCM_PROPERTY_REG_ID, regId);
+			editor.putInt(PROPERTY_APP_VERSION, appVersion);
+			editor.commit();
+		}
+		
+	}
+	
+	public static final String GCM_PROPERTY_REG_ID = "registration_id";
+	private static final String PROPERTY_APP_VERSION = "appVersion";
+	
+	/**
+	 * Gets the current registration ID for application on GCM service.
+	 * <p>
+	 * If result is empty, the app needs to register.
+	 *
+	 * @return registration ID, or empty string if there is no existing
+	 *         registration ID.
+	 */	
+	public String getGCMRegistrationID(Context context) {
+		final SharedPreferences prefs = this.getSharedPreferences("GCM_PREFS", Context.MODE_PRIVATE);
+		String registrationId = prefs.getString(GCM_PROPERTY_REG_ID, "");
+	    
+		if (registrationId.isEmpty()) {
+	        Log.i(TAG, "Registration not found.");
+	        return "";
+	    }
+		
+	    // Check if app was updated; if so, it must clear the registration ID
+	    // since the existing regID is not guaranteed to work with the new
+	    // app version.
+	    int registeredVersion = prefs.getInt(PROPERTY_APP_VERSION, Integer.MIN_VALUE);
+	    int currentVersion = getAppVersion(context);
+	    if (registeredVersion != currentVersion) {
+	        Log.i(TAG, "App version changed.");
+	        return "";
+	    }
+	    return registrationId;
+	}
+
+	//private String SENDER_ID = "304926128006";
+	//private GoogleCloudMessaging gcm;
 	private NotificationHub hub;
 	private LocationClient locationClient;
 	//private String userid = "1267167108";
@@ -167,32 +326,48 @@ public class MainActivity extends FragmentActivity implements
 				try{
 					
 					if( isNetworkAvailable() ) {
-					
-						ViewGroup mContainerView = (ViewGroup) findViewById(R.id.main_layout);
-						LayoutTransition lt = new LayoutTransition();
-						lt.disableTransitionType(LayoutTransition.CHANGING);
-						mContainerView.setLayoutTransition(lt);
+						
+						if( marker.getSnippet().contains("Reported by") ){
+							
+							try{
+								Intent intent = new Intent(MainActivity.this, ChatRoomActivity.class);
+								String snippet = marker.getSnippet();
+								String[] tokens = snippet.split(" ");
+								String userid = tokens[2];
+			                    intent.putExtra("userid", userid);
+			                    startActivity(intent);
+							} catch(Exception ex){
+								ex.printStackTrace();
+							}
+		                    
+						}else{
+							
+							ViewGroup mContainerView = (ViewGroup) findViewById(R.id.main_layout);
+							LayoutTransition lt = new LayoutTransition();
+							lt.disableTransitionType(LayoutTransition.CHANGING);
+							mContainerView.setLayoutTransition(lt);
 
-						View chatLayout = findViewById(R.id.chatGlanceLayoyt);
-						chatLayout.setVisibility(View.VISIBLE);
-						
-						//Animation vanish = AnimationUtils.loadAnimation(MainActivity.this,
-						//												R.anim.vanish);
-						//findViewById(R.id.chatGlanceLayoyt).startAnimation(vanish);
-						
-						Location currentLocation = locationClient.getLastLocation();
-						
-						Intent intent = new Intent(MainActivity.this, SendActivity.class);
-						Bundle b = new Bundle();
-						b.putParcelable("currentLocation", currentLocation);
-
-						intent.putExtras(b);
-						
-						SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-						String prefUserID = sharedPrefs.getString("prefUsername", "");
-						
-						intent.putExtra("userid", prefUserID);
-						startActivity(intent);
+							View chatLayout = findViewById(R.id.chatGlanceLayoyt);
+							chatLayout.setVisibility(View.VISIBLE);
+							
+							//Animation vanish = AnimationUtils.loadAnimation(MainActivity.this,
+							//												R.anim.vanish);
+							//findViewById(R.id.chatGlanceLayoyt).startAnimation(vanish);
+							
+							Location currentLocation = locationClient.getLastLocation();
+							
+							Intent intent = new Intent(MainActivity.this, SendActivity.class);
+							Bundle b = new Bundle();
+							b.putParcelable("currentLocation", currentLocation);
+	
+							intent.putExtras(b);
+							
+							SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+							String prefUserID = sharedPrefs.getString("prefUsername", "");
+							
+							intent.putExtra("userid", prefUserID);
+							startActivity(intent);
+						}
 					}
 					else {
 						AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(MainActivity.this);
@@ -206,6 +381,7 @@ public class MainActivity extends FragmentActivity implements
 				}
 				catch(Exception ex){
 					ex.printStackTrace();
+					Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
 				}
 				
 			}
@@ -215,7 +391,9 @@ public class MainActivity extends FragmentActivity implements
 		gMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);	
 		gMap.setBuildingsEnabled(true);	
 
-		Log.i(TAG, "UI set");
+		if (BuildConfig.DEBUG) {
+			Log.i(TAG, "UI set");
+		}
 		
 		LocationManager locationManager = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
 		
@@ -226,7 +404,9 @@ public class MainActivity extends FragmentActivity implements
 											  300,
 											  this);
 		
-		Log.i(TAG, "Location listener is set");
+		if (BuildConfig.DEBUG) {
+			Log.i(TAG, "Location listener is set");
+		}
 		
 		// Check device for Play Services APK
 		if( checkPlayServices() ) {
@@ -235,9 +415,17 @@ public class MainActivity extends FragmentActivity implements
 			// when Google Play Services are connected - see onConnected() method
 			
 			try{
-					gcm = GoogleCloudMessaging.getInstance(this);
-					String connectionString = "Endpoint=sb://variant.servicebus.windows.net/;SharedAccessKeyName=DefaultListenSharedAccessSignature;SharedAccessKey=ZMuryU3+QPa8GYO29tnE3ji2R9gsZWzJZfcF/qbsDy8=";
-					hub = new NotificationHub("geochathub", connectionString, this);
+				//if( getGCMRegistrationID(this).isEmpty() ) {
+					new RegisterOnGCM().execute(this, null, null);
+					Log.i(TAG, "Registration with GCM is schedulled");
+				//} else {
+				//	Log.i(TAG, "GCM Registration skipped");
+				//}
+				
+					//String connectionString = "Endpoint=sb://variant.servicebus.windows.net/;SharedAccessKeyName=DefaultListenSharedAccessSignature;SharedAccessKey=ZMuryU3+QPa8GYO29tnE3ji2R9gsZWzJZfcF/qbsDy8=";
+					//hub = new NotificationHub("geochathub", connectionString, this);
+					String connectionString = "Endpoint=sb://variant.servicebus.windows.net/;SharedAccessKeyName=DefaultListenSharedAccessSignature;SharedAccessKey=qW1ebXOAAkJxRLQ0eejGvfmr1gvgDdaQmjrD/pY9XcE=";
+					hub = new NotificationHub("youhelphub", connectionString, this);
 	
 					// Location client depends on GooglePlay services and used to get the first location fix as fast as possible.
 					// Further updates will come from previously initialized LocationManager
@@ -246,11 +434,11 @@ public class MainActivity extends FragmentActivity implements
 
 			}
 			catch(Exception ex){
-				msbox(TAG, ex.getMessage());
+				msBox(TAG, ex.getMessage());
 			}
 			
 		}else{
-			msbox(TAG, "There is no Google Play Services. Please install them before running this application");
+			msBox(TAG, "There is no Google Play Services. Please install them before running this application");
 		}
 			
 
@@ -295,12 +483,17 @@ public class MainActivity extends FragmentActivity implements
 	@Override
 	public void onConnected(Bundle dataBundle) {
 
+		Toast.makeText(this, "Connected to GooglePlay", Toast.LENGTH_SHORT).show();
 		Log.i(TAG, "Connected to GooglePlay");
 		
 		Location currentLocation = locationClient.getLastLocation();
-		registerWithNotificationHubs(currentLocation);
 		
-		Log.i(TAG, "Registered with Notification Hub");
+//		//if( getGCMRegistrationID(this).isEmpty() ) {
+//			new RegisterOnGCM().execute(this, null, null);
+//			Log.i(TAG, "Registration with GCM is scheduled");
+//		//} else {
+//		//	Log.i(TAG, "GCM Registration skipped");
+//		//}
 
 		if( currentLocation != null){
 			
@@ -325,6 +518,7 @@ public class MainActivity extends FragmentActivity implements
 			Log.i(TAG, "Location fix received");
 			
 			if( location != null ){
+
 				String provider = location.getProvider();
 				
 				String s = "Provider: " + provider +  "\n";
@@ -332,16 +526,21 @@ public class MainActivity extends FragmentActivity implements
 		        s += "\tLongitude: " + location.getLongitude() + "¡\n";
 		        
 		        if( location.hasSpeed() )
-		        	s += "\tSpeed: " + location.getSpeed() + "¡\n";
+		        	s += "\tSpeed: " + location.getSpeed() + "\n";
 		        else
 		        	s += "\tNo speed reported";
 		        
-		        //Log.i(TAG, s);
+		        Log.i(TAG, s);
 		        
 				Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
 				
 				setMyLocation(location);
 				showLocations();
+				
+				String gcmRegID = this.getGCMRegistrationID(this);
+				if( !gcmRegID.isEmpty() ) {
+					registerWithNotificationHubs(location, gcmRegID);
+				}
 			}
 
 		}catch(Exception ex){
@@ -369,11 +568,11 @@ public class MainActivity extends FragmentActivity implements
 		
 	}
 	
-	public void msbox(String str,String str2)
+	public void msBox(String title,String message)
 	{
 	    AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(this);                      
-	    dlgAlert.setMessage(str2)
-	    		.setTitle(str)           
+	    dlgAlert.setMessage(message)
+	    		.setTitle(title)           
 	    		.setPositiveButton("OK", null)
 	    		//.setCancelable(true)
 	    		.create().show();
@@ -414,10 +613,19 @@ public class MainActivity extends FragmentActivity implements
 	
     private boolean isNetworkAvailable() {
     	
-    	ConnectivityManager connectivityManager 
-    	      = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-    	NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-    	return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    	ConnectivityManager connectivityManager;
+    	NetworkInfo activeNetworkInfo;
+    	
+    	try{
+    		
+    		connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+    		activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+    		
+    		return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+    	}
+    	catch(Exception ex){
+    		return false;
+    	}
     }
 	
 	private boolean checkPlayServices(){
@@ -430,88 +638,68 @@ public class MainActivity extends FragmentActivity implements
 							PLAY_SERVICES_RESOLUTION_REQUEST).show();
 				}
 				else {
-					//Log.i(TAG, "This device is not supported");
+					Log.i(TAG, "This device is not supported");
 					finish();
 				}
 				
 				return false;
 			}
 		}
-		catch(Exception ex)
-		{
+		catch(Exception ex){
+			
 			ex.getMessage();
 		}
 
 		return true;
 	}
 	
-	private void registerWithNotificationHubs(Location location) {
+	/**
+	 * @return Application's version code from the {@code PackageManager}.
+	 */
+	private static int getAppVersion(Context context) {
+	    try {
+	        PackageInfo packageInfo = context.getPackageManager()
+	                .getPackageInfo(context.getPackageName(), 0);
+	        return packageInfo.versionCode;
+	    } catch (NameNotFoundException e) {
+	        // should never happen
+	        throw new RuntimeException("Could not get package name: " + e);
+	    }
+	}
+	
+	private void registerWithNotificationHubs(Location location, String gcmRegID) {
 	   
 		if( location == null ) return;
 		
-		Address address = getAddress(location);
-		if( address == null ) return;
-		
-		
 		final List<String> tags = new ArrayList<String>();
-		if( address.getCountryCode() != null ) {
-			tags.add("Country:" + address.getCountryCode());
-		}
-		if( address.getPostalCode() != null ){
-			tags.add("PostalCode:"+address.getPostalCode());
-		}
-//		if( address.getLocality() != null ) {
-//			tags.add("Locality:" + address.getLocality());
-//		}
-		if( address.getAdminArea() != null ) {
-			// State/Region
-			tags.add("AdminArea:"+address.getAdminArea());
-		}
 		
-		new AsyncTask<Object, Object, String>() {
-	      
-			Activity thisActivity;
-			
-			@Override
-			protected void onPostExecute(String error){
-	    	  	
-	 			if( error.length() > 0){
-	 				AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(thisActivity);
-				
-	 				dlgAlert.setMessage(error);
-	 				dlgAlert.setTitle("YouHelp");
-	 				dlgAlert.setPositiveButton("OK", null);
-	 				dlgAlert.setCancelable(true);
-	 				dlgAlert.create().show();
-	 			}
+		try{
+			Address address = getAddress(location);
+			if( address == null ) {
+				Toast.makeText(this, "Geocoder Service is available, but no address was reported", Toast.LENGTH_SHORT).show();
+				return;
 			}
-			
-		  @Override
-	      protected String doInBackground(Object... params) {
-			  
-			  thisActivity = (Activity) params[0];
-			  
-	    	  String regid = "";
-	    	  try {
-	            regid = gcm.register(SENDER_ID);
-	    	  } catch (Exception e) {
-	    		  
-	        	 return "Failed to register with GCM. Exception: " + e.getMessage();
-	    	  }
-	    	  
-	         try{
-	        	 hub.register(regid, tags.toArray(new String[tags.size()]));
-	         }catch(Exception e1){
 
-		 		return "Failed to register with Azure Notification Hub. Exception: " + 	e1.getMessage();
-	         }
-	         
-	         return "";
-	     }
+//			if( address.getCountryCode() != null ) {
+//				tags.add("Country:" + address.getCountryCode());
+//			}
+			if( address.getPostalCode() != null ){
+				tags.add("PostalCode:"+address.getPostalCode());
+			}
+	//		if( address.getLocality() != null ) {
+	//			tags.add("Locality:" + address.getLocality());
+	//		}
+			if( address.getAdminArea() != null ) {
+				// State/Region
+				tags.add("AdminArea:"+address.getAdminArea());
+			}
+		}catch(Exception ex){
+			msBox("Unable to get address from Geocoder Service", ex.getLocalizedMessage());
+		}
 
-	   }.execute(null, null, null);
-	}
-	
+		RegisterOnAzureHub task = new RegisterOnAzureHub();
+		task.setTags(tags).setGCMRegID(gcmRegID).execute(this, null, null);
+	};
 
 	
 	@Override
@@ -543,34 +731,38 @@ public class MainActivity extends FragmentActivity implements
 
 	}
 
-	private Address getAddress(Location loc){
+	private Address getAddress(Location loc) throws Exception{
 		Context ctx = this.getBaseContext();
 		
 		Geocoder geocoder = new Geocoder(ctx, Locale.getDefault());
 		List<Address> addresses = null;
 		try {
+			// There is a problem with Geocoder on several android devices. See Google's bugtrack here
+			// https://code.google.com/p/android/issues/detail?id=38009
 			addresses = geocoder.getFromLocation(loc.getLatitude(), 
 									 loc.getLongitude(),
 									 1);
-		} catch (IOException e) {
+		} catch(Exception ex){
 			
-			e.printStackTrace();
-			return null;
-		} catch(IllegalArgumentException e2){
-			String errorString = "Illegal arguments " + 
-								Double.toString(loc.getLatitude()) +
-								" , " +
-								Double.toString(loc.getLongitude()) +
-								"passed to address service";
-			Log.e("GeoChat", errorString);
-			e2.printStackTrace();
-			return null;
+			Log.e(TAG, ex.getLocalizedMessage());
+			
+			if (ex instanceof IOException){
+				throw ex;
+			}else if(ex instanceof IllegalArgumentException){
+				String errorString = "Illegal arguments " + 
+						Double.toString(loc.getLatitude()) +
+						" , " +
+						Double.toString(loc.getLongitude()) +
+						"passed to address service";
+				Log.e(TAG, errorString);
+			}
 		}
 		
 		if( addresses != null 
 				&& addresses.size() > 0){
 			return addresses.get(0);
 		}else{
+			Toast.makeText(this, "Problem with agruments", Toast.LENGTH_SHORT).show();
 			return null;
 		}
 		
@@ -606,7 +798,7 @@ public class MainActivity extends FragmentActivity implements
 		
 		if( reportedLocations != null) {
 			for(ReportedPlace place: reportedLocations){
-				showReportedPlace(place, place.getSnippet());
+				showReportedPlace(place, place.getTitle(), place.getUserID());
 		}}
 	}
 	
@@ -621,11 +813,12 @@ public class MainActivity extends FragmentActivity implements
 		return myLocation;
 	}
 	
-	public void addReportedLocation(Location location, String title){
+	public void addReportedLocation(Location location, String title, String userid){
 		
 		if( reportedLocations != null){
 			ReportedPlace place = new ReportedPlace(location);
-			place.setSnippet(title);
+			place.setTitle(title);
+			place.setUserID(userid);
 			reportedLocations.add(place);
 		}
 	}
@@ -640,8 +833,8 @@ public class MainActivity extends FragmentActivity implements
 		showMarker(location, "You are here", "Say something", BitmapDescriptorFactory.HUE_AZURE);
 	}
 	
-	private void showReportedPlace(Location location, String snippet){
-		showMarker(location, "Reported place", snippet, BitmapDescriptorFactory.HUE_ROSE);
+	private void showReportedPlace(Location location, String title, String userid){
+		showMarker(location, title, "Reported by " + userid, BitmapDescriptorFactory.HUE_ROSE);
 	}
 	
 	private void showMarker(Location location, String title, String snippet,  float color){

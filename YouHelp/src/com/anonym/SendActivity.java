@@ -18,8 +18,7 @@ public class SendActivity extends Activity {
 
 	private Location currentLocation;
 	private String userid;
-	
-	@SuppressLint("NewApi")
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
