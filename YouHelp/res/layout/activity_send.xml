@@ -1,75 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="#123"
     android:orientation="vertical" >
-    
-    <LinearLayout
-        android:layout_width="240dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
- 
+
       <TextView
           android:id="@+id/greeting"
           android:layout_width="wrap_content"
+          android:layout_centerHorizontal="true"
           android:layout_height="wrap_content"
           android:layout_gravity="center"
-          android:layout_marginLeft="10dp"
           android:text="Say something"
           android:textColor="#FFF"
-          android:textSize="28sp" />
+          android:textSize="28sp"
+          />
         
        <Button
            android:id="@+id/btnHelp"
-           android:layout_width="fill_parent"
+           android:layout_width="120dip"
+           android:layout_marginTop="10dip"
            android:layout_height="wrap_content"
+           android:layout_below="@id/greeting"
+           android:layout_centerHorizontal="true"
            android:background="@drawable/sendbuttonshape"
            android:onClick="onClickHelp"
-           android:text="Help"
+           android:text="@string/help_button_caption"
            android:textColor="#123"
            android:textSize="18sp" />
 
        <Button
            android:id="@+id/btnHello"
-           android:layout_width="fill_parent"
+           android:layout_width="120dip"
+           android:layout_centerHorizontal="true"
            android:layout_height="wrap_content"
            android:background="@drawable/sendbuttonshape"
            android:onClick="onClickHelp"
            android:layout_marginTop="10dip"
-           android:text="Hello"
-           android:textColor="#123" />
+           android:text="@string/hello_button_caption"
+           android:textColor="#123" 
+           android:layout_below="@id/btnHelp"/>
  
        <Button
            android:id="@+id/btnWelocome"
-           android:layout_width="fill_parent"
+           android:layout_width="120dip"
+           android:layout_centerHorizontal="true"
            android:layout_height="wrap_content"
            android:background="@drawable/sendbuttonshape"
            android:onClick="onClickHelp"
            android:layout_marginTop="10dip"
-           android:text="Welcome"
-           android:textColor="#123" />
+           android:text="@string/welcome_button_caption"
+           android:textColor="#123" 
+           android:layout_below="@id/btnHello" />
         
        <Button
            android:id="@+id/btnPing"
-           android:layout_width="fill_parent"
+           android:layout_width="120dip"
+           android:layout_centerHorizontal="true"
            android:layout_height="wrap_content"
            android:background="@drawable/sendbuttonshape"
            android:onClick="onClickHelp"
            android:layout_marginTop="10dip"
-           android:text="Ping"
-           android:textColor="#123" />
+           android:text="@string/ping_button_caption"
+           android:textColor="#123"
+           android:layout_below="@id/btnWelocome"  />
        
        <Button
            android:id="@+id/btnEmergencyWhatsapp"
-             android:layout_width="fill_parent"
+             android:layout_width="match_parent"
+             android:layout_centerHorizontal="true"
              android:layout_height="wrap_content"
+             android:background="@drawable/sendbuttonshape"
              android:textColor="#F00"
              android:layout_marginTop="10dip"
-             android:onClick="onClickEmergencyWhatsApp"
-             android:text="WhatsApp" />
-         
-    </LinearLayout>
+             android:onClick="onClickEmergency"
+             android:text="@string/emergency_button_caption"
+             android:layout_below="@id/btnPing" />
+
     
-</LinearLayout>
+</RelativeLayout>

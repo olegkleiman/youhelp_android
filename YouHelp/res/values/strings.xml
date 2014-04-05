@@ -6,6 +6,12 @@
     <string name="hello_world">Hello world!</string>
     <string name="hint">Hint</string>
 
+    <string name="help_button_caption">Help</string>
+    <string name="hello_button_caption">Hello</string>
+    <string name="welcome_button_caption">Welcome</string>
+    <string name="ping_button_caption">Ping</string>
+    <string name="emergency_button_caption">Emergency</string>
+    
     <string name="refresh_button_caption">Refresh</string>
     <string name="sendmessage_button_caption">Send</string>
     <string name="next_register_button_caption">Next</string>
@@ -28,5 +34,11 @@
     <string name="pref_update_setting">Update Settings</string>
     <string name="send_toast_service_url">http://youhelp.cloudapp.net/YouHelpService.svc/sendtoast</string>
     <string name="app_id">531384416976939</string>
+    
+    <string name="pref_emergency_numbers">Emergecy Numbers</string>
+    <string name="pref_emergency_numbers_summary">Set emergency phone number</string>
+    <string name="pref_emergency_number1">Number 1</string>
+    <string name="pref_emergency_number2">Number 2</string>
+    <string name="pref_emergency_number3">Number 3</string>
     
 </resources>

@@ -1,23 +1,47 @@
 package com.anonym;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
+
+import com.google.android.gms.location.LocationClient;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.preference.PreferenceManager;
+import android.telephony.CellInfo;
+import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
+import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class SendActivity extends Activity {
 
 	private Location currentLocation;
 	private String userid;
+	
+	private static final String TAG = "com.anonym.youhelp.sendactivity";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +56,168 @@ public class SendActivity extends Activity {
 		currentLocation = extras.getParcelable("currentLocation");
 
 	}
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
+		
+		try{
+			unregisterReceiver(sendReceiver);
+			unregisterReceiver(deliveryReceiver);
+		} catch(Exception ex){
+			ex.printStackTrace();
+		}
+	}
+	
+	public void onClickEmergency(View view){
+		
+		try{
+			
+			SendWhatsApp();
+			
+			TelephonyManager tMgr = (TelephonyManager)this.getSystemService(Context.TELEPHONY_SERVICE);
+			List<CellInfo> cells = tMgr.getAllCellInfo();
+			String mPhoneNumber = tMgr.getLine1Number();
+			
+			String SENT = "sent";
+			String DELIVERED = "delivered";
+			
+			/* Create Pending Intents */
+			Intent sentIntent = new Intent(SENT);
+			final PendingIntent sentPI = PendingIntent.getBroadcast(getApplicationContext(), 0, 
+															sentIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+		
+			Intent deliveryIntent = new Intent(DELIVERED);
+			final PendingIntent deliverPI = PendingIntent.getBroadcast(getApplicationContext(), 
+										0, deliveryIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+			
+			// Register for SMS send action
+			registerReceiver(sendReceiver, new IntentFilter(SENT));
+			registerReceiver(deliveryReceiver, new IntentFilter(DELIVERED));
+		
+			final SmsManager smsManager = SmsManager.getDefault();
+			
+			SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+			if( sharedPrefs == null ) {
+				Toast.makeText(this, "Failed to obtain SharedPreferences",
+						Toast.LENGTH_LONG).show();
+				return;
+			}
+			
+			List<String> smsNumbers = new ArrayList<String>();
+				
+			String smsNumber1 = sharedPrefs.getString("prefEmergencyNumber1", "");
+			smsNumbers.add(smsNumber1);
+			String smsNumber2 = sharedPrefs.getString("prefEmergencyNumber2", "");
+			smsNumbers.add(smsNumber2);
+			String smsNumber3 = sharedPrefs.getString("prefEmergencyNumber3", "");
+			smsNumbers.add(smsNumber3);
+
+			StringBuilder sb = new StringBuilder("I'm in an emergency. Please help!\n Map link: \n here.com/");
+
+	   	    double lat = currentLocation.getLatitude();
+	   	    double lon = currentLocation.getLongitude();
+	   	 	String strCurrentLocation = String.format(Locale.US, "%.13f;%.13f", lat, lon);
+			sb.append(strCurrentLocation);
+			
+			String now = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+			sb.append(".\n Sent at ");
+			sb.append(now);
+			
+			final String emergencyMessage = sb.toString();
+			
+			int nSkip = 0;
+			for(final String smsNumber : smsNumbers){
+			
+				if( !smsNumber.isEmpty() ) {
+				
+					final Runnable runn = new Runnable() {
+	
+						@Override
+						public void run() {
+						
+							Log.i(TAG, "Sending to " +  smsNumber + ".\n Emergency message: " + emergencyMessage);
+							smsManager.sendTextMessage(smsNumber, null, emergencyMessage, 
+													   sentPI, deliverPI);
+						
+						}
+					};
+				
+					Handler handler = new Handler();
+					handler.postDelayed(runn, (nSkip++) * 3000);
+				}
+			}
+			
+		} catch(Exception ex){
+			
+			Toast.makeText(this,ex.getMessage().toString(),
+							Toast.LENGTH_LONG).show();
+		}
+		
+		finish();
+		
+
+	}
+
+	private void SendWhatsApp(){
+		
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		String smsNumber = sharedPrefs.getString("prefEmergencyNumber1", "");
+		
+		Uri uri = Uri.parse("smsto:" + smsNumber);
+		Intent i = new Intent(Intent.ACTION_SENDTO, uri);
+		i.putExtra("sms_body", "Test automaic SMS");  
+		//i.setPackage("com.whatsapp");  
+		startActivity(i);		
+	}
+	
+	private BroadcastReceiver deliveryReceiver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			
+			Toast.makeText(getApplicationContext(), "Deliverd",
+			         Toast.LENGTH_LONG).show();
+			
+		}
+		
+	};
+	
+	private BroadcastReceiver sendReceiver = new BroadcastReceiver(){
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			String result = "";
+			
+			switch( getResultCode() ){
+			case Activity.RESULT_OK:
+				result = "Transmission successful";
+				break;
+				
+			case Activity.RESULT_CANCELED:
+				result = "SMS not delivered";
+                break;                        
+				
+			case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
+				result = "Transmission failed";
+				break;
+				
+			case SmsManager.RESULT_ERROR_RADIO_OFF:
+				result = "Radio off";
+				break;
+				
+		    case SmsManager.RESULT_ERROR_NULL_PDU:
+		           result = "No PDU defined";
+		           break;
+		           
+		    case SmsManager.RESULT_ERROR_NO_SERVICE:
+		           result = "No service";
+		           break;
+			};
+			
+			Toast.makeText(getApplicationContext(),result,Toast.LENGTH_LONG).show();
+		}
+	};
 	
 	public void onClickHelp(View view) {
 		

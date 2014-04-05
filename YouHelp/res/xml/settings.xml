@@ -24,4 +24,16 @@
             android:title="@string/pref_map_apps" />
     </PreferenceCategory>
  
+    <PreferenceCategory android:title="@string/pref_emergency_numbers"
+        				android:summary="@string/pref_emergency_numbers_summary">
+        <EditTextPreference
+                android:title="@string/pref_emergency_number1"
+                android:key="prefEmergencyNumber1"/>
+        <EditTextPreference
+                android:title="@string/pref_emergency_number2"
+                android:key="prefEmergencyNumber2"/>
+        <EditTextPreference
+                android:title="@string/pref_emergency_number3"
+                android:key="prefEmergencyNumber3"/>
+    </PreferenceCategory>
 </PreferenceScreen>

@@ -483,7 +483,7 @@ public class MainActivity extends FragmentActivity implements
 	@Override
 	public void onConnected(Bundle dataBundle) {
 
-		Toast.makeText(this, "Connected to GooglePlay", Toast.LENGTH_SHORT).show();
+		//Toast.makeText(this, "Connected to GooglePlay", Toast.LENGTH_SHORT).show();
 		Log.i(TAG, "Connected to GooglePlay");
 		
 		Location currentLocation = locationClient.getLastLocation();

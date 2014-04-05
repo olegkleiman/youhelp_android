@@ -92,6 +92,7 @@ public class RegisterWizard_CreateNewUser extends Activity
 				String strUserName = "buddy:" + userid;
 				SharedPreferences.Editor editor = sharedPrefs.edit();
 				editor.putString("prefUsername", strUserName);
+				//editor.putString("prefPhoneNumber", "+972-0543307026");
 				editor.commit();
 				
 				Log.i(TAG, "Registration was successful with Buddy. User :" + user.toString() );
