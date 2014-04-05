@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#FFF"
+    android:background="#123"
     android:orientation="vertical" >
     
     <LinearLayout
@@ -18,38 +18,57 @@
           android:layout_gravity="center"
           android:layout_marginLeft="10dp"
           android:text="Say something"
-          android:textColor="#333"
+          android:textColor="#FFF"
           android:textSize="28sp" />
         
        <Button
            android:id="@+id/btnHelp"
            android:layout_width="fill_parent"
            android:layout_height="wrap_content"
-           android:textColor="#333"
-           android:textSize="18sp"
+           android:background="@drawable/sendbuttonshape"
            android:onClick="onClickHelp"
-           android:text="Help" />
+           android:text="Help"
+           android:textColor="#123"
+           android:textSize="18sp" />
 
        <Button
            android:id="@+id/btnHello"
            android:layout_width="fill_parent"
            android:layout_height="wrap_content"
+           android:background="@drawable/sendbuttonshape"
            android:onClick="onClickHelp"
-           android:text="Hello" />
+           android:layout_marginTop="10dip"
+           android:text="Hello"
+           android:textColor="#123" />
  
        <Button
-             android:id="@+id/btnWelocome"
-             android:layout_width="fill_parent"
-             android:layout_height="wrap_content"
-             android:onClick="onClickHelp"
-             android:text="Welcome" />
+           android:id="@+id/btnWelocome"
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"
+           android:background="@drawable/sendbuttonshape"
+           android:onClick="onClickHelp"
+           android:layout_marginTop="10dip"
+           android:text="Welcome"
+           android:textColor="#123" />
         
        <Button
-             android:id="@+id/btnPing"
+           android:id="@+id/btnPing"
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"
+           android:background="@drawable/sendbuttonshape"
+           android:onClick="onClickHelp"
+           android:layout_marginTop="10dip"
+           android:text="Ping"
+           android:textColor="#123" />
+       
+       <Button
+           android:id="@+id/btnEmergencyWhatsapp"
              android:layout_width="fill_parent"
              android:layout_height="wrap_content"
-             android:onClick="onClickHelp"
-             android:text="Ping" />
+             android:textColor="#F00"
+             android:layout_marginTop="10dip"
+             android:onClick="onClickEmergencyWhatsApp"
+             android:text="WhatsApp" />
          
     </LinearLayout>
     
