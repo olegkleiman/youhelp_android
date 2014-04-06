@@ -437,11 +437,11 @@ public class MainActivity extends FragmentActivity implements
 
 			}
 			catch(Exception ex){
-				msBox(TAG, ex.getMessage());
+				msgBox(TAG, ex.getMessage());
 			}
 			
 		}else{
-			msBox(TAG, "There is no Google Play Services. Please install them before running this application");
+			msgBox(TAG, "There is no Google Play Services. Please install them before running this application");
 		}
 		
 	}
@@ -567,7 +567,7 @@ public class MainActivity extends FragmentActivity implements
 		
 	}
 	
-	public void msBox(String title,String message)
+	public void msgBox(String title,String message)
 	{
 	    AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(this);                      
 	    dlgAlert.setMessage(message)
@@ -700,7 +700,7 @@ public class MainActivity extends FragmentActivity implements
 				tags.add("AdminArea:"+address.getAdminArea());
 			}
 		}catch(Exception ex){
-			msBox("Unable to get address from Geocoder Service", ex.getLocalizedMessage());
+			msgBox("Unable to get address from Geocoder Service", ex.getLocalizedMessage());
 		}
 		
 		return tags;

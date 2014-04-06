@@ -73,11 +73,11 @@ public class SendActivity extends Activity {
 		
 		try{
 			
-			SendWhatsApp();
+			//SendWhatsApp();
 			
-			TelephonyManager tMgr = (TelephonyManager)this.getSystemService(Context.TELEPHONY_SERVICE);
-			List<CellInfo> cells = tMgr.getAllCellInfo();
-			String mPhoneNumber = tMgr.getLine1Number();
+//			TelephonyManager tMgr = (TelephonyManager)this.getSystemService(Context.TELEPHONY_SERVICE);
+//			List<CellInfo> cells = tMgr.getAllCellInfo();
+//			String mPhoneNumber = tMgr.getLine1Number();
 			
 			String SENT = "sent";
 			String DELIVERED = "delivered";
@@ -107,12 +107,20 @@ public class SendActivity extends Activity {
 			List<String> smsNumbers = new ArrayList<String>();
 				
 			String smsNumber1 = sharedPrefs.getString("prefEmergencyNumber1", "");
-			smsNumbers.add(smsNumber1);
+			if( !smsNumber1.isEmpty() )
+				smsNumbers.add(smsNumber1);
 			String smsNumber2 = sharedPrefs.getString("prefEmergencyNumber2", "");
-			smsNumbers.add(smsNumber2);
+			if( !smsNumber2.isEmpty() )
+				smsNumbers.add(smsNumber2);
 			String smsNumber3 = sharedPrefs.getString("prefEmergencyNumber3", "");
-			smsNumbers.add(smsNumber3);
+			if( !smsNumber3.isEmpty() )
+				smsNumbers.add(smsNumber3);
 
+			if( smsNumbers.isEmpty() ) {
+				msgBox("No emergency numbers", "Please provide the emergency numbers in settings.");
+				return;
+			}
+			
 			StringBuilder sb = new StringBuilder("I'm in an emergency. Please help!\n Map link: \n here.com/");
 
 	   	    double lat = currentLocation.getLatitude();
@@ -159,6 +167,18 @@ public class SendActivity extends Activity {
 
 	}
 
+	public void msgBox(String title,String message)
+	{
+	    AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(this);                      
+	    dlgAlert.setMessage(message)
+	    		.setTitle(title)           
+	    		.setPositiveButton("OK", null)
+	    		//.setCancelable(true)
+	    		.create().show();
+
+	}
+	
+	@SuppressWarnings("unused")
 	private void SendWhatsApp(){
 		
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
