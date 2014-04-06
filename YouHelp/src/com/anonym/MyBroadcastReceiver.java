@@ -118,6 +118,11 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 					Intent wazeIntent = new Intent( Intent.ACTION_VIEW, Uri.parse( url ) );
 					wazeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					context.startActivity(wazeIntent);
+					
+					Location location = new Location("");
+					location.setLatitude(Float.parseFloat(tokens[0])); 
+					location.setLongitude(Float.parseFloat(tokens[1]));
+					showLocationOnMainActivity(mainActivity, location, title, userid);
 				}
 				break;
 		
@@ -140,18 +145,10 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 					gmIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					context.startActivity(gmIntent);
 
-					if( mainActivity != null ){
-						Location location = new Location("");
-						location.setLatitude(Float.parseFloat(tokens[0])); 
-						location.setLongitude(Float.parseFloat(tokens[1]));
-						
-						//location.setLatitude(32.072072072072); 
-						//location.setLongitude(34.871628036643);
-						
-						mainActivity.addReportedLocation(location, title, userid);
-						mainActivity.showLocations();
-
-					}
+					Location location = new Location("");
+					location.setLatitude(Float.parseFloat(tokens[0])); 
+					location.setLongitude(Float.parseFloat(tokens[1]));
+					showLocationOnMainActivity(mainActivity, location, title, userid);
 
 				}
 				break;
@@ -189,6 +186,23 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 
 	}
 
+	private void showLocationOnMainActivity(MainActivity mainActivity, 
+											Location location,
+											String title,
+											String userid)
+	{
+		
+		if( mainActivity != null ){
+			
+			//location.setLatitude(32.072072072072); 
+			//location.setLongitude(34.871628036643);
+			
+			mainActivity.addReportedLocation(location, title, userid);
+			mainActivity.showLocations();
+
+		}
+	}
+	
 	private void sendNotification(String msg) {
 		mNotificationManager = (NotificationManager)ctx.getSystemService(Context.NOTIFICATION_SERVICE);
 
