@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#123"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -15,8 +16,9 @@
             android:id="@+id/lblUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="User Name"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:text="@string/user_name_caption"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#FFF" />
 
         <EditText
             android:id="@+id/txtUserName"
@@ -32,8 +34,9 @@
             android:id="@+id/lblPassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Password"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:text="@string/user_password_caption"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#FFF" />
 
         <EditText
             android:id="@+id/txtPassword"
@@ -42,16 +45,17 @@
             android:ellipsize="end"
             android:ems="10"
             android:gravity="left"
-            android:maxLines="1"
-            android:hint="Minimum is 8 characters. Only alphanumeric and punctuation characters"
-            android:inputType="textPassword" />
+            android:hint="@string/user_password_hint"
+            android:inputType="textPassword"
+            android:maxLines="1" />
 
         <TextView
             android:id="@+id/lblEMail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="E-Mail"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:text="@string/user_email_caption"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#FFF" />
 
         <EditText
             android:id="@+id/txtEMail"
@@ -60,11 +64,6 @@
             android:inputType="textEmailAddress"
             android:ems="10" />
 
-        <TextView
-            android:id="@+id/lblRegistrationStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
 
     </LinearLayout>
     
@@ -78,9 +77,11 @@
 	    <Button
 	        android:id="@+id/btnCreateNewUser"
 	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
+	        android:layout_height="42dip"
+	        android:enabled="false"
+	        android:background="@drawable/sendbuttonshape"
 	        android:onClick="onCreateNewUser"
-	        android:text="Create" />
+	        android:text="@string/create_user_button_caption" />
     
     </LinearLayout>
 

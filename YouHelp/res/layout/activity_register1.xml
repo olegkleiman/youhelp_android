@@ -1,22 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#123"
     android:orientation="vertical" >
 
    	<TextView
-	        android:id="@+id/lblUserName"
+	        android:id="@+id/registerGreeting"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:text="@string/register_1_title"
+	        android:textColor="#FFF"
+	        android:layout_gravity="center"
+	        android:layout_centerHorizontal="true"
 	        android:textAppearance="?android:attr/textAppearanceLarge" />
     
     <RadioGroup
-        	android:layout_marginTop="62dip"
-        	android:layout_marginLeft="24dip"
-        	android:layout_weight="6"
-        	android:layout_width="match_parent"
-	        android:layout_height="wrap_content">
+        android:id="@+id/groupRegMethod"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_below="@id/registerGreeting"
+        android:layout_margin="-10dp"
+        android:layout_marginLeft="24dip"
+        android:layout_marginTop="62dip"
+        android:textColor="#FFF" >
  
 	    <RadioButton
 	        android:id="@+id/rbCreateUser"
@@ -24,6 +32,7 @@
 	        android:layout_height="wrap_content"
 	        android:onClick="onRadioButtonClicked"
 	        android:checked="true"
+	        android:textColor="#FFF"
 	        android:textAppearance="?android:attr/textAppearanceLarge" 
 	        android:text="@string/radio_createnew" />
 
@@ -32,27 +41,24 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:onClick="onRadioButtonClicked"
+	        android:textColor="#FFF"
 	        android:textAppearance="?android:attr/textAppearanceLarge" 
 	        android:text="@string/radio_fbLogin" />
 	</RadioGroup>
-	
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1"
-        android:baselineAligned="false"
-        android:gravity="end"
-        android:orientation="vertical" >
-            
-        <Button
-            android:id="@+id/btnRegister1Next"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical|center_horizontal|end"
-            android:onClick="onNext"
-            android:text="@string/next_register_button_caption" >
-            
-        </Button>        
-    </LinearLayout>
+   
+    <Button
+        android:id="@+id/btnRegister1Next"
+        android:layout_width="120dip"
+        android:layout_height="42dip"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="10dp"
+        android:background="@drawable/sendbuttonshape"
+        android:onClick="onNext"
+        android:text="@string/next_register_button_caption"
+        android:textColor="#123" >
+
+    </Button>        
+
     
-</LinearLayout>
+</RelativeLayout>
