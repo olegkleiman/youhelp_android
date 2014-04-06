@@ -24,8 +24,9 @@
             android:id="@+id/txtUserName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:ems="10"
             android:inputType="text"
-            android:ems="10" >
+            android:textColor="#FFF" >
 
             <requestFocus />
         </EditText>
@@ -47,7 +48,8 @@
             android:gravity="left"
             android:hint="@string/user_password_hint"
             android:inputType="textPassword"
-            android:maxLines="1" />
+            android:maxLines="1"
+            android:textColor="#FFF" />
 
         <TextView
             android:id="@+id/lblEMail"
@@ -61,9 +63,16 @@
             android:id="@+id/txtEMail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:ems="10"
             android:inputType="textEmailAddress"
-            android:ems="10" />
+            android:textColor="#FFF" />
 
+       <TextView
+           android:id="@+id/lblRegistrationStatus"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:textAppearance="?android:attr/textAppearanceLarge"
+           android:textColor="#F00" />
 
     </LinearLayout>
     
@@ -78,8 +87,9 @@
 	        android:id="@+id/btnCreateNewUser"
 	        android:layout_width="wrap_content"
 	        android:layout_height="42dip"
-	        android:enabled="false"
+	        android:layout_gravity="right"
 	        android:background="@drawable/sendbuttonshape"
+	        android:enabled="false"
 	        android:onClick="onCreateNewUser"
 	        android:text="@string/create_user_button_caption" />
     
