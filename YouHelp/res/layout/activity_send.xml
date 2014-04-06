@@ -67,7 +67,7 @@
        
        <Button
            android:id="@+id/btnEmergencyWhatsapp"
-             android:layout_width="match_parent"
+             android:layout_width="120dip"
              android:layout_centerHorizontal="true"
              android:layout_height="wrap_content"
              android:background="@drawable/sendbuttonshape"

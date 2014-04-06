@@ -256,6 +256,12 @@ public class MainActivity extends FragmentActivity implements
 			return;
 		}
 
+		InitStuff();	
+
+	}
+	
+	private void InitStuff(){
+		
 		this.mReceiver = new MyBroadcastReceiver(this);
 		registerReceiver(this.mReceiver, 
 				         new IntentFilter("com.google.android.c2dm.intent.RECEIVE"));
@@ -421,12 +427,9 @@ public class MainActivity extends FragmentActivity implements
 				//} else {
 				//	Log.i(TAG, "GCM Registration skipped");
 				//}
-				
-					//String connectionString = "Endpoint=sb://variant.servicebus.windows.net/;SharedAccessKeyName=DefaultListenSharedAccessSignature;SharedAccessKey=ZMuryU3+QPa8GYO29tnE3ji2R9gsZWzJZfcF/qbsDy8=";
-					//hub = new NotificationHub("geochathub", connectionString, this);
 					String connectionString = "Endpoint=sb://variant.servicebus.windows.net/;SharedAccessKeyName=DefaultListenSharedAccessSignature;SharedAccessKey=qW1ebXOAAkJxRLQ0eejGvfmr1gvgDdaQmjrD/pY9XcE=";
 					hub = new NotificationHub("youhelphub", connectionString, this);
-	
+					
 					// Location client depends on GooglePlay services and used to get the first location fix as fast as possible.
 					// Further updates will come from previously initialized LocationManager
 					locationClient = new LocationClient(this, this, this);
@@ -440,8 +443,7 @@ public class MainActivity extends FragmentActivity implements
 		}else{
 			msBox(TAG, "There is no Google Play Services. Please install them before running this application");
 		}
-			
-
+		
 	}
 	
 	 @Override
@@ -487,15 +489,12 @@ public class MainActivity extends FragmentActivity implements
 		Log.i(TAG, "Connected to GooglePlay");
 		
 		Location currentLocation = locationClient.getLastLocation();
-		
-//		//if( getGCMRegistrationID(this).isEmpty() ) {
-//			new RegisterOnGCM().execute(this, null, null);
-//			Log.i(TAG, "Registration with GCM is scheduled");
-//		//} else {
-//		//	Log.i(TAG, "GCM Registration skipped");
-//		//}
-
 		if( currentLocation != null){
+			
+			String gcmRegID = this.getGCMRegistrationID(this);
+			if( !gcmRegID.isEmpty() ) {
+				registerWithNotificationHubs(currentLocation, gcmRegID);
+			}
 			
 			setMyLocation(currentLocation);
 			showLocations();
@@ -583,8 +582,8 @@ public class MainActivity extends FragmentActivity implements
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
       super.onActivityResult(requestCode, resultCode, data);
       
-      if( requestCode == 1) { // QuickBlox
-      
+      if( requestCode == 1) { // Buddy
+    	  InitStuff();
       }
       else if( requestCode == 2) { // Check FB Session
 	      if( Session.getActiveSession() != null )
@@ -671,13 +670,20 @@ public class MainActivity extends FragmentActivity implements
 	   
 		if( location == null ) return;
 		
+		final List<String> tags = getTags(location);
+
+		RegisterOnAzureHub task = new RegisterOnAzureHub();
+		task.setTags(tags).setGCMRegID(gcmRegID).execute(this, null, null);
+	};
+
+	private List<String> getTags(Location location){
 		final List<String> tags = new ArrayList<String>();
 		
 		try{
 			Address address = getAddress(location);
 			if( address == null ) {
 				Toast.makeText(this, "Geocoder Service is available, but no address was reported", Toast.LENGTH_SHORT).show();
-				return;
+				return tags;
 			}
 
 //			if( address.getCountryCode() != null ) {
@@ -696,11 +702,9 @@ public class MainActivity extends FragmentActivity implements
 		}catch(Exception ex){
 			msBox("Unable to get address from Geocoder Service", ex.getLocalizedMessage());
 		}
-
-		RegisterOnAzureHub task = new RegisterOnAzureHub();
-		task.setTags(tags).setGCMRegID(gcmRegID).execute(this, null, null);
-	};
-
+		
+		return tags;
+	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

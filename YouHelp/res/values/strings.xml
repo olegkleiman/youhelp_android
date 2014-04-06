@@ -10,7 +10,7 @@
     <string name="hello_button_caption">Hello</string>
     <string name="welcome_button_caption">Welcome</string>
     <string name="ping_button_caption">Ping</string>
-    <string name="emergency_button_caption">Emergency</string>
+    <string name="emergency_button_caption">SOS</string>
     
     <string name="refresh_button_caption">Refresh</string>
     <string name="sendmessage_button_caption">Send</string>
