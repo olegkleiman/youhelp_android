@@ -73,8 +73,6 @@ public class SendActivity extends Activity {
 		
 		try{
 			
-			//SendWhatsApp();
-			
 //			TelephonyManager tMgr = (TelephonyManager)this.getSystemService(Context.TELEPHONY_SERVICE);
 //			List<CellInfo> cells = tMgr.getAllCellInfo();
 //			String mPhoneNumber = tMgr.getLine1Number();
@@ -121,8 +119,9 @@ public class SendActivity extends Activity {
 				return;
 			}
 			
-			StringBuilder sb = new StringBuilder("I'm in an emergency. Please help!\n Map link: \n here.com/");
-
+			StringBuilder sb = new StringBuilder("I'm in an emergency. Please help!\n Map link: \n"); 
+			sb.append("http://maps.google.com/?ie=UTF&z=138&hq=&ll="); // here.com/");
+			
 	   	    double lat = currentLocation.getLatitude();
 	   	    double lon = currentLocation.getLongitude();
 	   	 	String strCurrentLocation = String.format(Locale.US, "%.13f;%.13f", lat, lon);
@@ -134,25 +133,36 @@ public class SendActivity extends Activity {
 			
 			final String emergencyMessage = sb.toString();
 			
-			int nSkip = 0;
+			SendSmsWithIntent(smsNumbers, emergencyMessage);
+			
+			//final Activity sendingActivity = this;
+			
+			//int nSkip = 0;
 			for(final String smsNumber : smsNumbers){
 			
 				if( !smsNumber.isEmpty() ) {
-				
-					final Runnable runn = new Runnable() {
-	
-						@Override
-						public void run() {
-						
-							Log.i(TAG, "Sending to " +  smsNumber + ".\n Emergency message: " + emergencyMessage);
-							smsManager.sendTextMessage(smsNumber, null, emergencyMessage, 
-													   sentPI, deliverPI);
-						
-						}
-					};
-				
-					Handler handler = new Handler();
-					handler.postDelayed(runn, (nSkip++) * 3000);
+					
+					Log.i(TAG, "Sending to " +  smsNumber + ".\n Emergency message: " + emergencyMessage);
+					smsManager.sendTextMessage(smsNumber, null, emergencyMessage, 
+											   sentPI, deliverPI);
+					//Toast.makeText(sendingActivity, "SMS sent", Toast.LENGTH_SHORT).show();
+					
+//					final Runnable runn = new Runnable() {
+//	
+//						@Override
+//						public void run() {
+//						
+//							Log.i(TAG, "Sending to " +  smsNumber + ".\n Emergency message: " + emergencyMessage);
+//							smsManager.sendTextMessage(smsNumber, null, emergencyMessage, 
+//													   sentPI, deliverPI);
+//							Toast.makeText(sendingActivity, "SMS sent", Toast.LENGTH_SHORT).show();
+//						
+//						}
+//					};
+//				
+//
+//					Handler handler = new Handler();
+//					handler.postDelayed(runn, (nSkip++) * 3000);
 				}
 			}
 			
@@ -167,6 +177,25 @@ public class SendActivity extends Activity {
 
 	}
 
+	private static class SmsRunnable implements Runnable{
+
+		private final String message;
+		private final String smsNumber;
+		
+		SmsRunnable(final String message, final String smsNumber){
+			this.message = message;
+			this.smsNumber = smsNumber;
+		}
+		
+		@Override
+		public void run() {
+			final SmsManager smsManager = SmsManager.getDefault();
+			
+			
+		}
+		
+	}
+	
 	public void msgBox(String title,String message)
 	{
 	    AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(this);                      
@@ -179,14 +208,14 @@ public class SendActivity extends Activity {
 	}
 	
 	@SuppressWarnings("unused")
-	private void SendWhatsApp(){
+	private void SendSmsWithIntent(List<String> smsNumbers, String smsMesssage){
 		
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-		String smsNumber = sharedPrefs.getString("prefEmergencyNumber1", "");
+		String smsNumber = smsNumbers.get(0); //// sharedPrefs.getString("prefEmergencyNumber1", "");
 		
 		Uri uri = Uri.parse("smsto:" + smsNumber);
 		Intent i = new Intent(Intent.ACTION_SENDTO, uri);
-		i.putExtra("sms_body", "Test automaic SMS");  
+		i.putExtra("sms_body", smsMesssage);  
 		//i.setPackage("com.whatsapp");  
 		startActivity(i);		
 	}

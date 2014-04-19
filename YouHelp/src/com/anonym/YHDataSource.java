@@ -3,6 +3,7 @@ package com.anonym;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import android.content.ContentValues;
@@ -33,11 +34,14 @@ public class YHDataSource {
 	
 	public YHMessage createYHMessage(String content, 
 									String userid, 
-									Date dateCreated){
+									Date dateCreated,
+									String toUserid){
 		
 		ContentValues values = new ContentValues();
 		values.put(YHSQLiteHelper.COLUMN_CONTENT, content);
 		values.put(YHSQLiteHelper.COLUMN_USERID, userid);
+		if( !toUserid.isEmpty() )
+			values.put(YHSQLiteHelper.COLUMN_TOUSERID, toUserid);
 		
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		values.put(YHSQLiteHelper.COLUMN_DATECREATED, dateFormat.format(dateCreated));
@@ -58,6 +62,18 @@ public class YHDataSource {
 		long id = message.getId();
 		database.delete(YHSQLiteHelper.TABLE_MESSAGES, 
 				YHSQLiteHelper.COLUMN_ID + " = " + id, null);
+	}
+	
+	public void deleteAllMessagesOfUser(String userid){
+		List<YHMessage> messages = getMessagesOfUser(userid);
+		Iterator<YHMessage> iterator = messages.iterator();
+		
+		while(iterator.hasNext()){
+			YHMessage message = iterator.next();
+			deleteYHMessage(message);
+			
+			iterator.remove();
+		}
 	}
 	
 	public List<YHMessage> getAllMessages() {
@@ -82,7 +98,10 @@ public class YHDataSource {
 		
 		Cursor cursor = database.query(YHSQLiteHelper.TABLE_MESSAGES,
 				allColumns,
-				YHSQLiteHelper.COLUMN_USERID + " = '" + userid + "'", null, null, null, null);
+				YHSQLiteHelper.COLUMN_USERID + " = '" + userid + "' or touserid = '" + userid + "'" , 
+				null, null, null, 
+				// last parameter for order by clause
+				"date_created ASC");
 		
 		cursor.moveToFirst();
 		while( !cursor.isAfterLast()){

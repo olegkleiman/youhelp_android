@@ -51,7 +51,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 		datasource.open();
 		 
 		Date date = new Date();
-		datasource.createYHMessage(content, userid, date);
+		datasource.createYHMessage(content, userid, date, "");
 		datasource.close();
 		
 		}catch(Exception ex){

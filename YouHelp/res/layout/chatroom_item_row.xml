@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout 
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" 
-    android:layout_width="fill_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/chatItemRowBackground"
+    android:layout_width="wrap_content"
     android:layout_height="fill_parent"
-    android:padding="10dp">
+    android:orientation="horizontal"
+    android:padding="10dp" >
     
      <ImageView android:id="@+id/imgIcon"
         android:contentDescription="Profile Picture"
@@ -25,4 +25,4 @@
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp" />
         
-</LinearLayout>
+</RelativeLayout>

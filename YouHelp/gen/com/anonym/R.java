@@ -429,7 +429,7 @@ containing a value of this type.
         public static final int zero128=0x7f020047;
     }
     public static final class id {
-        public static final int action_settings=0x7f06003b;
+        public static final int action_settings=0x7f06003c;
         public static final int btnCreateNewUser=0x7f060013;
         public static final int btnEmergencyWhatsapp=0x7f060022;
         public static final int btnHello=0x7f06001f;
@@ -440,30 +440,31 @@ containing a value of this type.
         public static final int btnSendChatMessage=0x7f060009;
         public static final int btnWelocome=0x7f060020;
         public static final int chatGlanceLayoyt=0x7f060016;
-        public static final int com_facebook_login_activity_progress_bar=0x7f060028;
-        public static final int com_facebook_picker_activity_circle=0x7f060027;
-        public static final int com_facebook_picker_checkbox=0x7f06002a;
-        public static final int com_facebook_picker_checkbox_stub=0x7f06002e;
-        public static final int com_facebook_picker_divider=0x7f060032;
-        public static final int com_facebook_picker_done_button=0x7f060031;
-        public static final int com_facebook_picker_image=0x7f06002b;
-        public static final int com_facebook_picker_list_section_header=0x7f06002f;
-        public static final int com_facebook_picker_list_view=0x7f060026;
-        public static final int com_facebook_picker_profile_pic_stub=0x7f06002c;
-        public static final int com_facebook_picker_row_activity_circle=0x7f060029;
-        public static final int com_facebook_picker_search_text=0x7f060037;
-        public static final int com_facebook_picker_title=0x7f06002d;
-        public static final int com_facebook_picker_title_bar=0x7f060034;
-        public static final int com_facebook_picker_title_bar_stub=0x7f060033;
-        public static final int com_facebook_picker_top_bar=0x7f060030;
-        public static final int com_facebook_search_bar_view=0x7f060036;
-        public static final int com_facebook_usersettingsfragment_login_button=0x7f06003a;
-        public static final int com_facebook_usersettingsfragment_logo_image=0x7f060038;
-        public static final int com_facebook_usersettingsfragment_profile_name=0x7f060039;
+        public static final int chatItemRowBackground=0x7f060024;
+        public static final int com_facebook_login_activity_progress_bar=0x7f060029;
+        public static final int com_facebook_picker_activity_circle=0x7f060028;
+        public static final int com_facebook_picker_checkbox=0x7f06002b;
+        public static final int com_facebook_picker_checkbox_stub=0x7f06002f;
+        public static final int com_facebook_picker_divider=0x7f060033;
+        public static final int com_facebook_picker_done_button=0x7f060032;
+        public static final int com_facebook_picker_image=0x7f06002c;
+        public static final int com_facebook_picker_list_section_header=0x7f060030;
+        public static final int com_facebook_picker_list_view=0x7f060027;
+        public static final int com_facebook_picker_profile_pic_stub=0x7f06002d;
+        public static final int com_facebook_picker_row_activity_circle=0x7f06002a;
+        public static final int com_facebook_picker_search_text=0x7f060038;
+        public static final int com_facebook_picker_title=0x7f06002e;
+        public static final int com_facebook_picker_title_bar=0x7f060035;
+        public static final int com_facebook_picker_title_bar_stub=0x7f060034;
+        public static final int com_facebook_picker_top_bar=0x7f060031;
+        public static final int com_facebook_search_bar_view=0x7f060037;
+        public static final int com_facebook_usersettingsfragment_login_button=0x7f06003b;
+        public static final int com_facebook_usersettingsfragment_logo_image=0x7f060039;
+        public static final int com_facebook_usersettingsfragment_profile_name=0x7f06003a;
         public static final int greeting=0x7f06001d;
         public static final int groupRegMethod=0x7f060019;
         public static final int hybrid=0x7f060006;
-        public static final int imgIcon=0x7f060024;
+        public static final int imgIcon=0x7f060025;
         public static final int large=0x7f060002;
         public static final int lblEMail=0x7f060010;
         public static final int lblPassword=0x7f06000e;
@@ -473,11 +474,11 @@ containing a value of this type.
         public static final int lvChatusers=0x7f06000a;
         public static final int main_layout=0x7f060014;
         public static final int map=0x7f060015;
-        public static final int menu_about=0x7f06003c;
+        public static final int menu_about=0x7f06003d;
         public static final int messageCountView=0x7f060017;
         public static final int none=0x7f060003;
         public static final int normal=0x7f060001;
-        public static final int picker_subtitle=0x7f060035;
+        public static final int picker_subtitle=0x7f060036;
         public static final int rbCreateUser=0x7f06001a;
         public static final int rbSignFacebook=0x7f06001b;
         public static final int registerGreeting=0x7f060018;
@@ -488,7 +489,7 @@ containing a value of this type.
         public static final int txtHeader=0x7f060023;
         public static final int txtMessage=0x7f060008;
         public static final int txtPassword=0x7f06000f;
-        public static final int txtTitle=0x7f060025;
+        public static final int txtTitle=0x7f060026;
         public static final int txtUserName=0x7f06000d;
     }
     public static final class integer {

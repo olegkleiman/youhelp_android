@@ -497,6 +497,7 @@ public class MainActivity extends FragmentActivity implements
 			}
 			
 			setMyLocation(currentLocation);
+			
 			showLocations();
 		}
  
@@ -700,7 +701,9 @@ public class MainActivity extends FragmentActivity implements
 				tags.add("AdminArea:"+address.getAdminArea());
 			}
 		}catch(Exception ex){
-			msgBox("Unable to get address from Geocoder Service", ex.getLocalizedMessage());
+			ex.printStackTrace();
+			//Toast.makeText(this, ex.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+			//msgBox("Unable to get address from Geocoder Service", ex.getLocalizedMessage());
 		}
 		
 		return tags;
@@ -804,6 +807,8 @@ public class MainActivity extends FragmentActivity implements
 			for(ReportedPlace place: reportedLocations){
 				showReportedPlace(place, place.getTitle(), place.getUserID());
 		}}
+		
+
 	}
 	
 	private Location myLocation = new Location("");

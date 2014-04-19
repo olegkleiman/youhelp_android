@@ -11,6 +11,7 @@ public class YHSQLiteHelper extends SQLiteOpenHelper {
 	public static final String COLUMN_CONTENT = "content";
 	public static final String COLUMN_USERID = "userid";
 	public static final String COLUMN_DATECREATED = "date_created";
+	public static final String COLUMN_TOUSERID = "touserid";
 	private static final String DATABASE_NAME = "yh";
 	private static final int DATABASE_VERSION = 1;
 	
@@ -18,8 +19,9 @@ public class YHSQLiteHelper extends SQLiteOpenHelper {
 			+ TABLE_MESSAGES + "(" + COLUMN_ID
 			+ " integer primary key autoincrement, " 
 			+ COLUMN_CONTENT + " unicode text not null, " 
-			+ COLUMN_USERID + " text, " 
-			+ COLUMN_DATECREATED + " date);";
+			+ COLUMN_USERID + " unicode text not null, " 
+			+ COLUMN_DATECREATED + " date not null,"
+			+ COLUMN_TOUSERID + " unicode text)";
 	
 	public YHSQLiteHelper(Context context){
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
