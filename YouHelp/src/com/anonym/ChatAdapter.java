@@ -1,7 +1,9 @@
 package com.anonym;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-
 import android.app.Activity;
 import android.content.Context;
 import android.view.Gravity;
@@ -10,15 +12,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class ChatAdapter extends ArrayAdapter<YHMessage> {
 	   
 	Context context; 
     int layoutResourceId;    
-    List<YHMessage> data = null;
+    List<YHMessage> data = new ArrayList<YHMessage>();
     String myUSerID;
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 	
 	public ChatAdapter(Context context, int layoutResourceId, List<YHMessage> data, String userID) {
 	        super(context, layoutResourceId, data);
@@ -30,6 +33,24 @@ public class ChatAdapter extends ArrayAdapter<YHMessage> {
         
 	}
 	
+	@Override
+	public void add(YHMessage message) {
+		//data.add(message);
+		super.add(message); // this call triggers the re-binding of adapter (including getView() invocations )
+	}
+	
+	public int getCount() {
+		return this.data.size();
+	}
+	
+	public YHMessage getItem(int index) {
+		return this.data.get(index);
+	}
+	
+	//
+	// There is absolutely no guarantee on the order in which getView() will be called 
+	// nor how many times.
+	// 
 	@Override
     public View getView(int position, View convertView, ViewGroup parent) {
         
@@ -45,7 +66,7 @@ public class ChatAdapter extends ArrayAdapter<YHMessage> {
             
             holder.imgIcon = (ImageView)row.findViewById(R.id.imgIcon);
             holder.txtView = (TextView)row.findViewById(R.id.txtTitle);
-            holder.background = (RelativeLayout)row.findViewById(R.id.chatItemRowBackground);
+            holder.background = (LinearLayout)row.findViewById(R.id.chatItemRowBackground);
             
             row.setTag(holder);
         }
@@ -54,20 +75,29 @@ public class ChatAdapter extends ArrayAdapter<YHMessage> {
             holder = (ChatHolder)row.getTag();
         }
         
-        YHMessage replica = data.get(position);
+        YHMessage replica = this.getItem(position);
+        Date dateCreated = replica.getDateCreated();
+        
+		//String strDate = dateFormat.format(dateCreated);
+        //String strText = replica.getContent() + "\n" + strDate;
+        // !!!
         holder.txtView.setText(replica.getContent());
         holder.imgIcon.setImageResource(replica.icon);
         
-        if( myUSerID.equals( replica.getUserId()) ) {
+        if( //!replica.getUserId().isEmpty()  &&
+        		myUSerID.equals( replica.getUserId()) ) {
         	
         	holder.txtView.setGravity(Gravity.RIGHT);
+        	holder.txtView.setBackgroundResource(R.drawable.bubble_green);
             holder.background.setGravity(Gravity.RIGHT);
             
         } else {
         
         	holder.txtView.setGravity(Gravity.LEFT);
+        	holder.txtView.setBackgroundResource(R.drawable.bubble_yellow);
         	holder.background.setGravity(Gravity.LEFT);
         }
+        
         return row;
     }
 	
@@ -75,6 +105,6 @@ public class ChatAdapter extends ArrayAdapter<YHMessage> {
     {
         ImageView imgIcon;
         TextView txtView;
-        RelativeLayout background;
+        LinearLayout background;
     }
 }

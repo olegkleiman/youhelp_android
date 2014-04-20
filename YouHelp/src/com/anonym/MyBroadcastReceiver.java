@@ -1,10 +1,14 @@
 package com.anonym;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningTaskInfo;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
@@ -97,64 +101,20 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 			}
 			
 			persistMessage(context, title, userid);
-
-			// Assume Google Maps as default
-			String strMapAppCode = sharedPrefs.getString("prefMapApps", "2");
-			int mapCode = Integer.parseInt(strMapAppCode);
-
-			switch( mapCode )
-			{
-				case 1: // Waze
-				{
-					StringBuilder sb = new StringBuilder("waze://?ll=");
-					sb.append(tokens[0]);
-					sb.append(",");
-					sb.append(tokens[1]);
-					sb.append("&z=6");
-					
-					// center waze map to lat / lon:
-					String url = sb.toString(); // "waze://?ll=32.072072072072075,34.8716280366431456&z=6"; // "waze://?q=Jerusalem";
-					
-					Intent wazeIntent = new Intent( Intent.ACTION_VIEW, Uri.parse( url ) );
-					wazeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					context.startActivity(wazeIntent);
-					
-					Location location = new Location("");
-					location.setLatitude(Float.parseFloat(tokens[0])); 
-					location.setLongitude(Float.parseFloat(tokens[1]));
-					showLocationOnMainActivity(mainActivity, location, title, userid);
-				}
-				break;
-		
-				case 2: // Google Maps
-				{
-					StringBuilder sb = new StringBuilder("geo:0,0?q=");
-					sb.append(tokens[0]);
-					sb.append(",");
-					sb.append(tokens[1]);
-					sb.append("(" + title + " from " + userid + ")");
-					
-					String url = sb.toString();
-					
-					Intent gmIntent = new Intent(android.content.Intent.ACTION_VIEW, 
-						    //Uri.parse("http://maps.google.com/maps?daddr=32.072072072072075,34.8716280366431456&mode=driving"));
-							//Uri.parse("geo:0,0?q=32.072072072072075,34.8716280366431456(Reported Place)")
-							Uri.parse( url )
-							);
-					gmIntent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
-					gmIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					context.startActivity(gmIntent);
-
-					Location location = new Location("");
-					location.setLatitude(Float.parseFloat(tokens[0])); 
-					location.setLongitude(Float.parseFloat(tokens[1]));
-					showLocationOnMainActivity(mainActivity, location, title, userid);
-
-				}
-				break;
+			
+			if( isActivityActive(context, "com.anonym/com.anonym.ChatRoomActivity") ){
+				addMessageToChatRoomActivity(context, title, userid);
+			} else {  //if( isActivityActive(context, "com.anonym/com.anonym.MainActivity") )  
 				
+				Location location = new Location("");
+				location.setLatitude(Float.parseFloat(tokens[0])); 
+				location.setLongitude(Float.parseFloat(tokens[1]));
+				
+				showLocationOnMainActivity(mainActivity, location, title, userid);
+				
+				startExternalActivity(context, tokens[0], tokens[1], title, userid);
 			}
-
+			
 			GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(context);
 		    ctx = context;
 		        
@@ -186,6 +146,104 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 
 	}
 
+	private void startExternalActivity(Context context,
+									String lat,
+									String lon,
+									String title,
+									String userid)
+	{
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+		// Assume Google Maps as default
+		String strMapAppCode = sharedPrefs.getString("prefMapApps", "2");
+		int mapCode = Integer.parseInt(strMapAppCode);
+		
+		switch( mapCode )
+		{
+			case 1: // Waze
+			{
+				StringBuilder sb = new StringBuilder("waze://?ll=");
+				sb.append(lat);
+				sb.append(",");
+				sb.append(lon);
+				sb.append("&z=6");
+				
+				// center waze map to lat / lon:
+				String url = sb.toString(); // "waze://?ll=32.072072072072075,34.8716280366431456&z=6"; // "waze://?q=Jerusalem";
+				
+				Intent wazeIntent = new Intent( Intent.ACTION_VIEW, Uri.parse( url ) );
+				wazeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				context.startActivity(wazeIntent);
+
+			}
+			break;
+	
+			case 2: // Google Maps
+			{
+				StringBuilder sb = new StringBuilder("geo:0,0?q=");
+				sb.append(lat);
+				sb.append(",");
+				sb.append(lon);
+				sb.append("(" + title + " from " + userid + ")");
+				
+				String url = sb.toString();
+				
+				Intent gmIntent = new Intent(android.content.Intent.ACTION_VIEW, 
+					    //Uri.parse("http://maps.google.com/maps?daddr=32.072072072072075,34.8716280366431456&mode=driving"));
+						//Uri.parse("geo:0,0?q=32.072072072072075,34.8716280366431456(Reported Place)")
+						Uri.parse( url )
+						);
+				gmIntent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+				gmIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				context.startActivity(gmIntent);
+
+			}
+			break;
+			
+		}
+	}
+	
+	private boolean isActivityActive(Context context, String activityName)
+	{
+		ArrayList<String> runningactivities = new ArrayList<String>();
+		ActivityManager activityManager = (ActivityManager)context.getSystemService (Context.ACTIVITY_SERVICE); 
+		List<RunningTaskInfo> services = activityManager.getRunningTasks(Integer.MAX_VALUE); 
+
+		for (int i1 = 0; i1 < services.size(); i1++) { 
+	        runningactivities.add(0,services.get(i1).topActivity.toString());  
+	    }
+		
+		StringBuilder sb = new StringBuilder("ComponentInfo{");
+		sb.append(activityName);
+		sb.append("}");
+		
+		String componentName = sb.toString();
+		
+		if(runningactivities.contains(componentName)==true){
+	        return true;
+
+	    }
+		
+		return false;
+	}
+	
+	private void addMessageToChatRoomActivity(Context context,
+											  String messageTitle,
+											  String userid)
+	{
+		try{
+			Intent intent = new Intent(context, ChatRoomActivity.class);// new Intent("com.anonym.ADD_MESSAGE");
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | 
+							Intent.FLAG_ACTIVITY_NO_ANIMATION | 
+							Intent.FLAG_FROM_BACKGROUND);
+			
+			intent.putExtra("userid", userid);
+			context.startActivity(intent);
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+	
 	private void showLocationOnMainActivity(MainActivity mainActivity, 
 											Location location,
 											String title,

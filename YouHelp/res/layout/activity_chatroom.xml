@@ -2,11 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" 
-    android:background="#FFFFFF">
+    android:orientation="vertical">
  
     <View android:layout_width="fill_parent" android:layout_height="2dp"
-		android:fadingEdge="horizontal" android:background="#555555" />
+		android:fadingEdge="horizontal"/>
+    
+    <TextView android:id="@+id/txtHeader2"
+        android:layout_width="fill_parent"
+        android:layout_height="54dip"
+        android:gravity="center_vertical"
+        android:textStyle="bold"
+        android:textSize="22sp"
+        android:textColor="#FFFFFF"
+        android:background="#010101"
+        android:padding="10dp"
+        android:text="" />
     
     <ListView
         android:id="@+id/lvChatRoom"
@@ -14,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="top"
         android:layout_weight="25"
-        android:divider="#0000CC"
+		android:background="#010101"
         android:dividerHeight="0.1dp"
         android:fadingEdge="none"
         android:fastScrollEnabled="true"
@@ -33,7 +43,7 @@
         android:layout_weight="1"
         android:baselineAligned="false"
        	android:orientation="horizontal"  
-		android:background="#222222" android:padding="8dip">  
+		android:padding="8dip">  
 	    
 	    <EditText
  	        android:id="@+id/txtMessage"
@@ -41,8 +51,9 @@
         	android:layout_height="fill_parent"
         	android:layout_weight="1"
         	android:maxLines="5"
-        	android:inputType="textShortMessage|textAutoCorrect|textMultiLine|textCapSentences"
-        	android:imeOptions="actionSend" android:cursorVisible="true">
+        	android:inputType="text|textAutoCorrect"
+        	android:imeOptions="normal" 
+        	android:cursorVisible="true">
 	    </EditText>
 	    
 	    <Button
@@ -52,6 +63,30 @@
 	        android:onClick="onSendChatMessage"
 	        android:text="@string/sendmessage_button_caption" />
     
+    </LinearLayout>
+    
+    <LinearLayout
+			android:layout_width="fill_parent"
+			android:background="#010101"
+			android:layout_height="wrap_content"
+			android:layout_weight="1">
+
+        <Button
+            android:id="@+id/buttonClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onDelteChat"
+            android:text="@string/buttonDeleteAll"
+            android:textColor="#FFFFFF" />
+        
+        <Button
+            android:id="@+id/buttonCallMe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onCallMeChat"
+            android:text="@string/buttonCallMe" 
+            android:textColor="#FFFFFF" />
+        
     </LinearLayout>
     
 </LinearLayout>

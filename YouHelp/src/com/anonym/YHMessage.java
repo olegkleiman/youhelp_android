@@ -9,6 +9,7 @@ public class YHMessage {
 	private String Content;
 	private String UserID;
 	private Date DateCreated;
+	private String toUserID;
 	
 	public YHMessage(){
 		
@@ -53,9 +54,18 @@ public class YHMessage {
 		DateCreated = date;
 	}
 	
+	public String getToUserId() {
+		return toUserID;
+	}
+	
+	public void setToUserId(String userid){
+		toUserID = userid;
+	}
+	
 	@Override
 	public String toString(){
 		return UserID + Content;
 	}
+	
 	
 }

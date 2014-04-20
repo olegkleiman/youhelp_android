@@ -1,5 +1,6 @@
 package com.anonym;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,7 +19,8 @@ public class YHDataSource {
 	private String[] allColumns = { YHSQLiteHelper.COLUMN_ID, 
 							YHSQLiteHelper.COLUMN_CONTENT,
 							YHSQLiteHelper.COLUMN_USERID,
-							YHSQLiteHelper.COLUMN_DATECREATED };
+							YHSQLiteHelper.COLUMN_DATECREATED,
+							YHSQLiteHelper.COLUMN_TOUSERID};
 	
 	public YHDataSource(Context context){
 		dbHelper = new YHSQLiteHelper(context);
@@ -40,11 +42,13 @@ public class YHDataSource {
 		ContentValues values = new ContentValues();
 		values.put(YHSQLiteHelper.COLUMN_CONTENT, content);
 		values.put(YHSQLiteHelper.COLUMN_USERID, userid);
+		
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		String strDate = dateFormat.format(dateCreated);
+		values.put(YHSQLiteHelper.COLUMN_DATECREATED, strDate);
+		
 		if( !toUserid.isEmpty() )
 			values.put(YHSQLiteHelper.COLUMN_TOUSERID, toUserid);
-		
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		values.put(YHSQLiteHelper.COLUMN_DATECREATED, dateFormat.format(dateCreated));
 		
 		long insertID = database.insert(YHSQLiteHelper.TABLE_MESSAGES, null, values);
 		
@@ -65,7 +69,11 @@ public class YHDataSource {
 	}
 	
 	public void deleteAllMessagesOfUser(String userid){
+		
 		List<YHMessage> messages = getMessagesOfUser(userid);
+		if( messages.size() == 0)
+			return;
+		
 		Iterator<YHMessage> iterator = messages.iterator();
 		
 		while(iterator.hasNext()){
@@ -94,8 +102,10 @@ public class YHDataSource {
 	}
 	
 	public List<YHMessage> getMessagesOfUser(String userid){
+		
 		List<YHMessage> messages = new ArrayList<YHMessage>();
 		
+		try{
 		Cursor cursor = database.query(YHSQLiteHelper.TABLE_MESSAGES,
 				allColumns,
 				YHSQLiteHelper.COLUMN_USERID + " = '" + userid + "' or touserid = '" + userid + "'" , 
@@ -112,6 +122,10 @@ public class YHDataSource {
 		}
 		
 		cursor.close();
+		} catch(Exception ex){
+			
+			ex.printStackTrace();
+		}
 		return messages;
 	}
 	
@@ -121,8 +135,18 @@ public class YHDataSource {
 		message.setId(cursor.getLong(0));
 		message.setContent(cursor.getString(1));
 		message.setUserID(cursor.getString(2));
-		Date date = new Date(cursor.getLong(3)*1000);
+		
+		String strDate = cursor.getString(3); //cursor.getLong(3)*1000);
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		
+		Date date = new Date();
+		try {
+			date = dateFormat.parse(strDate); 
+		} catch (ParseException e) {
+		
+		}
 		message.setDateCreated(date);
+		message.setToUserId(cursor.getString(4));
 		
 		return message;
 	}
