@@ -61,7 +61,7 @@
         <activity
             android:name="com.anonym.ChatRoomActivity">
             <intent-filter>
-                <action android:name="com.anonym.ADD_MESSAGE" />
+                <action android:name="android.intent.action.VIEW" />
             </intent-filter>
 		</activity>
         
