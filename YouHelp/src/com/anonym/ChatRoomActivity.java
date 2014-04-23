@@ -7,13 +7,16 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.microsoft.windowsazure.messaging.NotificationHub;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
@@ -39,6 +42,30 @@ public class ChatRoomActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_chatroom);
+		
+		ServiceConnection mConnection = new ServiceConnection() {
+
+			@Override
+			public void onServiceConnected(ComponentName name,
+					IBinder service) {
+				
+//				DispatchService dipsService = (DispatchService)service;
+//				if( dipsService != null ) 
+					//dipsService.setChatActivity(this);
+					Log.i("", "DispService connected");
+				
+			}
+
+			@Override
+			public void onServiceDisconnected(ComponentName name) {
+				// TODO Auto-generated method stub
+				
+			}
+		
+		};
+		
+		Intent serviceIntent = new Intent(this, DispatchService.class);
+		this.bindService(serviceIntent, mConnection, Context.BIND_AUTO_CREATE);
 		
 //		Context appCtx = getApplicationContext();
 //		
