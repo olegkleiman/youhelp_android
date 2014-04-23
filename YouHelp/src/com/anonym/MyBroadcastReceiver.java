@@ -13,20 +13,25 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 import android.widget.Toast;
 
-public class MyBroadcastReceiver extends BroadcastReceiver {
+
+public class MyBroadcastReceiver extends BroadcastReceiver { // WakefulBroadcastReceiver
 
 	private static final String TAG = "MyBroadcastReceiver";
 	
@@ -37,14 +42,40 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 	MainActivity mainActivity;
 	String userId; 
 	
+	ServiceConnection mConnection;
+	
 	private YHDataSource datasource;
 	
 	public MyBroadcastReceiver(MainActivity activity){
 		this.mainActivity = activity;
+		
+		mConnection = new ServiceConnection() {
+
+			@Override
+			public void onServiceConnected(ComponentName name,
+					IBinder service) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onServiceDisconnected(ComponentName name) {
+				// TODO Auto-generated method stub
+				
+			}
+		
+		};
+		
+		Intent serviceIntent = new Intent(activity, DispatchService.class);
+		activity.bindService(serviceIntent, mConnection, Context.BIND_AUTO_CREATE);
 	}
 	
 	public void setUserID(String userID){
 		this.userId = userID;
+	}
+	
+	public void setChatActivity(ChatRoomActivity activity){
+		
 	}
 	
 	private void persistMessage(Context context, String content, String userid){
@@ -81,13 +112,15 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 				Toast.makeText(context, "Empty Notification Received", Toast.LENGTH_SHORT).show();
 				return;
 			}
-			
+		
 			String title = extras.getString("msg");
 			String userid = extras.getString("userid");
 			String coords = extras.getString("coords");
 			String[] tokens = coords.split(";");
 			if( tokens.length != 2 ) 
 				return;
+			
+
 			
 			SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 			

@@ -2,11 +2,20 @@ package com.anonym;
 
 import java.util.Date;
 import java.util.List;
+
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.microsoft.windowsazure.messaging.NotificationHub;
+
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -15,15 +24,30 @@ import android.widget.Toast;
 
 public class ChatRoomActivity extends Activity {
 
+	private static final String TAG = "com.anonym.youhelp.chatroomactivity";
+	
 	private YHDataSource datasource;
 	private ChatAdapter chatAdapter;
 	String toUserid;
 	private String myUserID;
 	
+	private GoogleCloudMessaging gcm;
+	private NotificationHub hub;
+	private String GCM_SENDER_ID = "939177037001";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_chatroom);
+		
+//		Context appCtx = getApplicationContext();
+//		
+//		PackageManager pm = getApplicationContext().getPackageManager();
+//		Intent intent = new Intent("com.google.android.c2dm.intent.RECEIVE");
+//		List<ResolveInfo> receivers = pm.queryBroadcastReceivers(intent, 0);
+//		for(final ResolveInfo rInfo : receivers){
+//			Log.i(TAG, rInfo.toString() );
+//		}
 		
 		ListView messagesList = (ListView)findViewById(R.id.lvChatRoom);
 		
@@ -35,6 +59,12 @@ public class ChatRoomActivity extends Activity {
 		
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 		myUserID = sharedPrefs.getString("prefUsername", "");
+		
+		this.gcm = GoogleCloudMessaging.getInstance(this);
+		String connectionString = "Endpoint=sb://variant.servicebus.windows.net/;SharedAccessKeyName=DefaultListenSharedAccessSignature;SharedAccessKey=WYlEAkd3+RzDMkHd9JK+TVG5ahRcWTwccl9CKCPNZ50=";
+		hub = new NotificationHub("youhelpchat", connectionString, this);
+		
+		registerWithNotificationHubs();
 		
 		try{
 			
@@ -64,6 +94,25 @@ public class ChatRoomActivity extends Activity {
 		}
 	}
 	
+	private void registerWithNotificationHubs()
+	{
+		new AsyncTask<Object, Object, Object>() {
+			
+			@Override
+			protected Object doInBackground(Object... params) {
+				try {
+					String gcmRegID = gcm.register(GCM_SENDER_ID);
+					hub.register(gcmRegID, myUserID);
+				} catch(Exception e) {
+					return e;
+				}
+				
+				return null;
+			}
+			
+		}.execute(null, null, null);
+	}
+	
 	public void onCallMeChat(View view){
 		
 	}
@@ -88,6 +137,25 @@ public class ChatRoomActivity extends Activity {
 			YHMessage message = new YHMessage(0, strMessage);
 			message.setUserID(myUserID);
 			chatAdapter.add(message);
+			
+			String serviceURL = getString(R.string.send_chatmessage_url);
+			// Should be something like http://youhelp.cloudapp.net/YouHelpService.svc/sendchatmessage?content=;
+			
+			StringBuilder sb = new StringBuilder(serviceURL); 
+			sb.append("?content=");
+			sb.append(strMessage);
+	  	 	
+			sb.append("&fromuserid=");
+			sb.append(myUserID);
+			
+			sb.append("&touserid=");
+			sb.append(toUserid);
+			
+			String uri = sb.toString();
+			
+			PerformCheckInAsyncTask sendTask = new PerformCheckInAsyncTask();
+			sendTask.ParentActivity = this;
+			sendTask.execute(uri);
 			
 		}catch(Exception ex){
 			

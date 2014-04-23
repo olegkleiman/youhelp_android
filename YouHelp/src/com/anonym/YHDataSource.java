@@ -84,6 +84,29 @@ public class YHDataSource {
 		}
 	}
 	
+	public List<YHMessagesGroup> getAllMessagesGroupedByUsers() {
+		List<YHMessagesGroup> messages = new ArrayList<YHMessagesGroup>();
+		
+		try{
+			Cursor cursor = database.rawQuery("select userid, count(*) from yhMessages group by userid", 
+											  null);
+			cursor.moveToFirst();
+			while( !cursor.isAfterLast()){
+				YHMessagesGroup mGroup = cursorToYHMessageGroup(cursor);
+				messages.add(mGroup);
+				cursor.moveToNext();
+			}
+			
+			cursor.close();
+			
+		}catch(Exception ex){
+			
+			ex.printStackTrace();
+		}
+		
+		return messages;
+	}
+	
 	public List<YHMessage> getAllMessages() {
 		List<YHMessage> messages = new ArrayList<YHMessage>();
 		
@@ -127,6 +150,16 @@ public class YHDataSource {
 			ex.printStackTrace();
 		}
 		return messages;
+	}
+	
+	private YHMessagesGroup cursorToYHMessageGroup(Cursor cursor){
+		
+		YHMessagesGroup mGroup = new YHMessagesGroup();
+		mGroup.setUserId(cursor.getString(0));
+		mGroup.setCount(cursor.getLong(1));
+		
+		
+		return mGroup;
 	}
 	
 	private YHMessage cursorToYHMessage(Cursor cursor){

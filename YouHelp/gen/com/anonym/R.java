@@ -529,7 +529,7 @@ containing a value of this type.
     }
     public static final class string {
         public static final int action_settings=0x7f090034;
-        public static final int app_id=0x7f090052;
+        public static final int app_id=0x7f090053;
         public static final int app_name=0x7f090033;
         /**   Title for notification shown when GooglePlayServices needs to be
         enabled for a application to work. [CHAR LIMIT=70] 
@@ -554,8 +554,8 @@ containing a value of this type.
         [CHAR LIMIT=70] 
          */
         public static final int auth_client_using_bad_version_title=0x7f09002d;
-        public static final int buttonCallMe=0x7f090059;
-        public static final int buttonDeleteAll=0x7f090058;
+        public static final int buttonCallMe=0x7f09005a;
+        public static final int buttonDeleteAll=0x7f090059;
         public static final int com_facebook_choose_friends=0x7f09000f;
         public static final int com_facebook_dialogloginactivity_ok_button=0x7f090000;
         public static final int com_facebook_internet_permission_error_message=0x7f090013;
@@ -661,11 +661,11 @@ containing a value of this type.
         public static final int menu_settings=0x7f090042;
         public static final int next_register_button_caption=0x7f09003e;
         public static final int ping_button_caption=0x7f09003a;
-        public static final int pref_emergency_number1=0x7f090055;
-        public static final int pref_emergency_number2=0x7f090056;
-        public static final int pref_emergency_number3=0x7f090057;
-        public static final int pref_emergency_numbers=0x7f090053;
-        public static final int pref_emergency_numbers_summary=0x7f090054;
+        public static final int pref_emergency_number1=0x7f090056;
+        public static final int pref_emergency_number2=0x7f090057;
+        public static final int pref_emergency_number3=0x7f090058;
+        public static final int pref_emergency_numbers=0x7f090054;
+        public static final int pref_emergency_numbers_summary=0x7f090055;
         public static final int pref_map_apps=0x7f09004b;
         public static final int pref_map_apps_summary=0x7f09004c;
         public static final int pref_send_report=0x7f090049;
@@ -678,6 +678,7 @@ containing a value of this type.
         public static final int radio_fbLogin=0x7f090041;
         public static final int refresh_button_caption=0x7f09003c;
         public static final int register_1_title=0x7f09003f;
+        public static final int send_chatmessage_url=0x7f090052;
         public static final int send_toast_service_url=0x7f090051;
         public static final int sendmessage_button_caption=0x7f09003d;
         public static final int title_activity_main=0x7f090043;

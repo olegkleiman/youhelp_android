@@ -34,9 +34,10 @@ public class ChatUsersActivity extends Activity {
 			datasource = new YHDataSource(this);
 		
 		datasource.open();
-		final List<YHMessage> messages = datasource.getAllMessages();
+		//final List<YHMessage> messages = datasource.getAllMessages();
+		final List<YHMessagesGroup> messages = datasource.getAllMessagesGroupedByUsers();
 		
-		ArrayAdapter<YHMessage> adapter = new ArrayAdapter<YHMessage>(this,
+		ArrayAdapter<YHMessagesGroup> adapter = new ArrayAdapter<YHMessagesGroup>(this,
 				android.R.layout.simple_list_item_2, 
 				android.R.id.text1,
 				messages){
@@ -49,15 +50,16 @@ public class ChatUsersActivity extends Activity {
 						TextView text1 = (TextView) view.findViewById(android.R.id.text1);
 						TextView text2 = (TextView) view.findViewById(android.R.id.text2);
 				    
-						YHMessage msg = messages.get(position);
+						YHMessagesGroup msg = messages.get(position);
 				    
-						text1.setText(msg.getContent());
-						
-						SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-						Date dateCreated = msg.getDateCreated() ;
-
-						String text = "" +  dateFormat.format(dateCreated) + " " + msg.getUserId();
-						text2.setText(text);
+						text1.setText(msg.getUserId());
+						text2.setText( "" + msg.getCount() );
+//						
+//						SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//						Date dateCreated = msg.getDateCreated() ;
+//
+//						String text = "" +  dateFormat.format(dateCreated) + " " + msg.getUserId();
+//						text2.setText(text);
 					
 						return view;
 
@@ -74,7 +76,7 @@ public class ChatUsersActivity extends Activity {
 				public void onItemClick(AdapterView<?> parent, View view,
 										int position, long id){
 						
-					YHMessage msg = messages.get(position);
+					YHMessagesGroup msg = messages.get(position);
 					
                     Intent intent = new Intent(getApplicationContext(), 
                     							ChatRoomActivity.class);
