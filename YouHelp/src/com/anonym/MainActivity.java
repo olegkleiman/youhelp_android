@@ -82,13 +82,8 @@ public class MainActivity extends FragmentActivity implements
     	  	
  			if( error.length() > 0){
  				
- 				AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(thisActivity);
-			
- 				dlgAlert.setMessage(error);
- 				dlgAlert.setTitle(TAG);
- 				dlgAlert.setPositiveButton("OK", null);
- 				dlgAlert.setCancelable(true);
- 				dlgAlert.create().show();
+ 				msgBox(TAG, error);
+
  			}
 		}
 		
@@ -132,13 +127,8 @@ public class MainActivity extends FragmentActivity implements
 			
  			if( error.length() > 0){
  				
- 				AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(activity);
-			
- 				dlgAlert.setMessage(error);
- 				dlgAlert.setTitle(TAG);
- 				dlgAlert.setPositiveButton("OK", null);
- 				dlgAlert.setCancelable(true);
- 				dlgAlert.create().show();
+ 				msgBox(TAG, error);
+
  			}
         }
 		
@@ -376,13 +366,9 @@ public class MainActivity extends FragmentActivity implements
 						}
 					}
 					else {
-						AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(MainActivity.this);
 						
-				   	 	dlgAlert.setMessage("Yau are not connected to network");
-				   	 	dlgAlert.setTitle("YouHelp");
-				   	 	dlgAlert.setPositiveButton("OK", null);
-				   	 	dlgAlert.setCancelable(true);
-				   	 	dlgAlert.create().show();
+						MainActivity.this.msgBox(MainActivity.TAG, "Yau are not connected to network");
+
 					}
 				}
 				catch(Exception ex){
@@ -574,9 +560,8 @@ public class MainActivity extends FragmentActivity implements
 	    dlgAlert.setMessage(message)
 	    		.setTitle(title)           
 	    		.setPositiveButton("OK", null)
-	    		//.setCancelable(true)
+	    		.setCancelable(true)
 	    		.create().show();
-
 	}
 	
     @Override

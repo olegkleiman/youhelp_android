@@ -308,7 +308,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver { // WakefulBroadcast
 		          .setContentTitle("You Help")
 		          .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
 		          .setStyle(new NotificationCompat.BigTextStyle()
-		                     .bigText(msg))
+		              			.bigText(msg))
 		          .setContentText(msg);
 
 		mBuilder.setContentIntent(contentIntent);
