@@ -13,6 +13,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -42,14 +43,19 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Color;
 import android.support.v4.app.FragmentActivity;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.SpinnerAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import android.app.ActionBar.OnNavigationListener;
@@ -508,8 +514,8 @@ public class MainActivity extends FragmentActivity implements
 				String provider = location.getProvider();
 				
 				String s = "Provider: " + provider +  "\n";
-				s += "\tLatitude:  " + location.getLatitude() + "¡\n";
-		        s += "\tLongitude: " + location.getLongitude() + "¡\n";
+				s += "\tLatitude:  " + location.getLatitude() + "Â°\n";
+		        s += "\tLongitude: " + location.getLongitude() + "Â°\n";
 		        
 		        if( location.hasSpeed() )
 		        	s += "\tSpeed: " + location.getSpeed() + "\n";
@@ -824,8 +830,13 @@ public class MainActivity extends FragmentActivity implements
 //		tempLoc.setLongitude(34.871628036);
 		//showMarker(tempLoc, "She is there", "", BitmapDescriptorFactory.HUE_RED);
 
+		//String currentLanguage = Locale.getDefault().getLanguage();
+		
 		String youAreHere =  getResources().getString(R.string.you_are_here);
-		showMarker(location, youAreHere, "Say something", BitmapDescriptorFactory.HUE_AZURE);
+		String saySomething = getResources().getString(R.string.say_something);
+		showMarker(location, 
+				youAreHere, 
+				saySomething, BitmapDescriptorFactory.HUE_AZURE);
 	}
 	
 	private void showReportedPlace(Location location, String title, String userid){
@@ -852,6 +863,40 @@ public class MainActivity extends FragmentActivity implements
 		gMap.animateCamera(CameraUpdateFactory.zoomIn());
 		// Zoom out to specified zoom level, animating with a duration of 2 seconds.
 		gMap.animateCamera(CameraUpdateFactory.zoomTo(zoomLevel), 2000, null);
+		
+		gMap.setInfoWindowAdapter( new InfoWindowAdapter() {
+
+			@Override
+			public View getInfoContents(Marker marker) {
+				
+				View content = getLayoutInflater().inflate(R.layout.infoview, null);
+				
+				TextView info = ((TextView) content.findViewById(R.id.txtInfoWindowTitle));
+				if( info != null) {
+
+					String title = marker.getTitle();
+					
+					// Spannable string allows to edit the formatting of the text.
+					SpannableString titleText = new SpannableString(title);
+					titleText.setSpan(new ForegroundColorSpan(Color.BLUE), 0, 
+										titleText.length(), 0);
+					info.setText(titleText);
+					
+					TextView txtSnippet = ((TextView) content.findViewById(R.id.txtInfoWindowEventType));
+					txtSnippet.setText(marker.getSnippet());
+				}
+
+				return content;
+			}
+
+			// If getInfoWindow() returns null, getInfoContents() is used
+			// for the contents of the window
+			@Override
+			public View getInfoWindow(Marker marker) {
+				
+				return null;
+			}
+		});
 		
 		Marker meMarker = gMap.addMarker(new MarkerOptions()
         		.position(ME)

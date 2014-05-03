@@ -3,9 +3,12 @@
 
     <string name="app_name">You Help</string>
 
-    <string name="action_settings">Налаштування&#8230;</string>
-    <string name="you_are_here">Ви тут</string>
-    <string name="hint">Натяк</string>
+    <string name="action_settings">Paramètres</string>
+    <string name="action_about">Sur ce programme</string>
+    <string name="you_are_here">Vous êtes ici</string>
+    <string name="say_something">Cliquez ici pour envoyer</string>
+    <string name="send_caption">Notifications</string>
+    <string name="hint">Astuce</string>
     
     <string name="help_button_caption">Aider</string>
     <string name="hello_button_caption">Salut!</string>
@@ -42,6 +45,8 @@
     <string name="send_toast_service_url">http://youhelp.cloudapp.net/YouHelpService.svc/sendtoast</string>
     <string name="send_chatmessage_url">http://youhelp.cloudapp.net/YouHelpService.svc/sendchatmessage</string>
     <string name="app_id">531384416976939</string>
+    
+    <string name="chat_enter">Appuyez ici pour voir les messages</string>
     
     <string name="pref_emergency_numbers">Les numéros d\'urgence</string>
     <string name="pref_emergency_numbers_summary">Réglez le numéro d\'urgence</string>

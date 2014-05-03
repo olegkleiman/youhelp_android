@@ -52,11 +52,11 @@
 		
     	<Button
     	    android:id="@+id/btnSendChatMessage"
-    	    android:layout_weight="1"
     	    android:layout_width="match_parent"
     	    android:layout_height="match_parent"
+    	    android:layout_weight="1"
     	    android:onClick="onClick_ViewMessages"
-    	    android:text="Tap here to see the responses" >
+    	    android:text="@string/chat_enter" >
     	    
     	</Button>    		
 	</LinearLayout>

@@ -431,7 +431,7 @@ containing a value of this type.
         public static final int zero128=0x7f020049;
     }
     public static final class id {
-        public static final int action_settings=0x7f06003f;
+        public static final int action_settings=0x7f060042;
         public static final int btnCreateNewUser=0x7f060016;
         public static final int btnEmergencyWhatsapp=0x7f060025;
         public static final int btnHello=0x7f060022;
@@ -469,6 +469,7 @@ containing a value of this type.
         public static final int groupRegMethod=0x7f06001c;
         public static final int hybrid=0x7f060006;
         public static final int imgIcon=0x7f060028;
+        public static final int ivInfoWindowMain=0x7f06003f;
         public static final int large=0x7f060002;
         public static final int lblEMail=0x7f060013;
         public static final int lblPassword=0x7f060011;
@@ -478,7 +479,7 @@ containing a value of this type.
         public static final int lvChatusers=0x7f06000d;
         public static final int main_layout=0x7f060017;
         public static final int map=0x7f060018;
-        public static final int menu_about=0x7f060040;
+        public static final int menu_about=0x7f060043;
         public static final int messageCountView=0x7f06001a;
         public static final int none=0x7f060003;
         public static final int normal=0x7f060001;
@@ -492,6 +493,8 @@ containing a value of this type.
         public static final int txtEMail=0x7f060014;
         public static final int txtHeader=0x7f060026;
         public static final int txtHeader2=0x7f060007;
+        public static final int txtInfoWindowEventType=0x7f060041;
+        public static final int txtInfoWindowTitle=0x7f060040;
         public static final int txtMessage=0x7f060009;
         public static final int txtPassword=0x7f060012;
         public static final int txtTitle=0x7f060029;
@@ -523,13 +526,15 @@ containing a value of this type.
         public static final int com_facebook_placepickerfragment_list_row=0x7f030013;
         public static final int com_facebook_search_bar_layout=0x7f030014;
         public static final int com_facebook_usersettingsfragment=0x7f030015;
+        public static final int infoview=0x7f030016;
     }
     public static final class menu {
         public static final int main=0x7f0d0000;
     }
     public static final class string {
+        public static final int action_about=0x7f090035;
         public static final int action_settings=0x7f090034;
-        public static final int app_id=0x7f090053;
+        public static final int app_id=0x7f090056;
         public static final int app_name=0x7f090033;
         /**   Title for notification shown when GooglePlayServices needs to be
         enabled for a application to work. [CHAR LIMIT=70] 
@@ -554,8 +559,9 @@ containing a value of this type.
         [CHAR LIMIT=70] 
          */
         public static final int auth_client_using_bad_version_title=0x7f09002d;
-        public static final int buttonCallMe=0x7f09005a;
-        public static final int buttonDeleteAll=0x7f090059;
+        public static final int buttonCallMe=0x7f09005e;
+        public static final int buttonDeleteAll=0x7f09005d;
+        public static final int chat_enter=0x7f090057;
         public static final int com_facebook_choose_friends=0x7f09000f;
         public static final int com_facebook_dialogloginactivity_ok_button=0x7f090000;
         public static final int com_facebook_internet_permission_error_message=0x7f090013;
@@ -652,41 +658,43 @@ containing a value of this type.
         /**  Long form sign-in button text [CHAR LIMIT=30] 
          */
         public static final int common_signin_button_text_long=0x7f09002c;
-        public static final int create_user_button_caption=0x7f090044;
-        public static final int emergency_button_caption=0x7f09003b;
-        public static final int hello_button_caption=0x7f090038;
-        public static final int help_button_caption=0x7f090037;
-        public static final int hint=0x7f090036;
-        public static final int menu_settings=0x7f090042;
-        public static final int next_register_button_caption=0x7f09003e;
-        public static final int ping_button_caption=0x7f09003a;
-        public static final int pref_emergency_number1=0x7f090056;
-        public static final int pref_emergency_number2=0x7f090057;
-        public static final int pref_emergency_number3=0x7f090058;
-        public static final int pref_emergency_numbers=0x7f090054;
-        public static final int pref_emergency_numbers_summary=0x7f090055;
-        public static final int pref_map_apps=0x7f09004b;
-        public static final int pref_map_apps_summary=0x7f09004c;
-        public static final int pref_send_report=0x7f090049;
-        public static final int pref_send_report_summary=0x7f09004a;
-        public static final int pref_update_setting=0x7f090050;
-        public static final int pref_user_name=0x7f09004d;
-        public static final int pref_user_name_summary=0x7f09004e;
-        public static final int pref_user_profile=0x7f09004f;
-        public static final int radio_createnew=0x7f090040;
-        public static final int radio_fbLogin=0x7f090041;
-        public static final int refresh_button_caption=0x7f09003c;
-        public static final int register_1_title=0x7f09003f;
-        public static final int send_chatmessage_url=0x7f090052;
-        public static final int send_toast_service_url=0x7f090051;
-        public static final int sendmessage_button_caption=0x7f09003d;
-        public static final int title_activity_main=0x7f090043;
-        public static final int user_email_caption=0x7f090048;
-        public static final int user_name_caption=0x7f090045;
-        public static final int user_password_caption=0x7f090046;
-        public static final int user_password_hint=0x7f090047;
-        public static final int welcome_button_caption=0x7f090039;
-        public static final int you_are_here=0x7f090035;
+        public static final int create_user_button_caption=0x7f090047;
+        public static final int emergency_button_caption=0x7f09003e;
+        public static final int hello_button_caption=0x7f09003b;
+        public static final int help_button_caption=0x7f09003a;
+        public static final int hint=0x7f090039;
+        public static final int menu_settings=0x7f090045;
+        public static final int next_register_button_caption=0x7f090041;
+        public static final int ping_button_caption=0x7f09003d;
+        public static final int pref_emergency_number1=0x7f09005a;
+        public static final int pref_emergency_number2=0x7f09005b;
+        public static final int pref_emergency_number3=0x7f09005c;
+        public static final int pref_emergency_numbers=0x7f090058;
+        public static final int pref_emergency_numbers_summary=0x7f090059;
+        public static final int pref_map_apps=0x7f09004e;
+        public static final int pref_map_apps_summary=0x7f09004f;
+        public static final int pref_send_report=0x7f09004c;
+        public static final int pref_send_report_summary=0x7f09004d;
+        public static final int pref_update_setting=0x7f090053;
+        public static final int pref_user_name=0x7f090050;
+        public static final int pref_user_name_summary=0x7f090051;
+        public static final int pref_user_profile=0x7f090052;
+        public static final int radio_createnew=0x7f090043;
+        public static final int radio_fbLogin=0x7f090044;
+        public static final int refresh_button_caption=0x7f09003f;
+        public static final int register_1_title=0x7f090042;
+        public static final int say_something=0x7f090037;
+        public static final int send_caption=0x7f090038;
+        public static final int send_chatmessage_url=0x7f090055;
+        public static final int send_toast_service_url=0x7f090054;
+        public static final int sendmessage_button_caption=0x7f090040;
+        public static final int title_activity_main=0x7f090046;
+        public static final int user_email_caption=0x7f09004b;
+        public static final int user_name_caption=0x7f090048;
+        public static final int user_password_caption=0x7f090049;
+        public static final int user_password_hint=0x7f09004a;
+        public static final int welcome_button_caption=0x7f09003c;
+        public static final int you_are_here=0x7f090036;
     }
     public static final class style {
         /** 
