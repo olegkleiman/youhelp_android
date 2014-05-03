@@ -655,7 +655,6 @@ containing a value of this type.
         public static final int create_user_button_caption=0x7f090044;
         public static final int emergency_button_caption=0x7f09003b;
         public static final int hello_button_caption=0x7f090038;
-        public static final int hello_world=0x7f090035;
         public static final int help_button_caption=0x7f090037;
         public static final int hint=0x7f090036;
         public static final int menu_settings=0x7f090042;
@@ -687,6 +686,7 @@ containing a value of this type.
         public static final int user_password_caption=0x7f090046;
         public static final int user_password_hint=0x7f090047;
         public static final int welcome_button_caption=0x7f090039;
+        public static final int you_are_here=0x7f090035;
     }
     public static final class style {
         /** 

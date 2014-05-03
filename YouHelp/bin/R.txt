@@ -294,7 +294,6 @@ int string common_signin_button_text_long 0x7f09002c
 int string create_user_button_caption 0x7f090044
 int string emergency_button_caption 0x7f09003b
 int string hello_button_caption 0x7f090038
-int string hello_world 0x7f090035
 int string help_button_caption 0x7f090037
 int string hint 0x7f090036
 int string menu_settings 0x7f090042
@@ -326,6 +325,7 @@ int string user_name_caption 0x7f090045
 int string user_password_caption 0x7f090046
 int string user_password_hint 0x7f090047
 int string welcome_button_caption 0x7f090039
+int string you_are_here 0x7f090035
 int style AppBaseTheme 0x7f0a0002
 int style AppTheme 0x7f0a0003
 int style com_facebook_loginview_default_style 0x7f0a0000

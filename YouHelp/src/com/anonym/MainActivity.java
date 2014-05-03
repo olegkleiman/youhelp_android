@@ -824,7 +824,8 @@ public class MainActivity extends FragmentActivity implements
 //		tempLoc.setLongitude(34.871628036);
 		//showMarker(tempLoc, "She is there", "", BitmapDescriptorFactory.HUE_RED);
 
-		showMarker(location, "You are here", "Say something", BitmapDescriptorFactory.HUE_AZURE);
+		String youAreHere =  getResources().getString(R.string.you_are_here);
+		showMarker(location, youAreHere, "Say something", BitmapDescriptorFactory.HUE_AZURE);
 	}
 	
 	private void showReportedPlace(Location location, String title, String userid){
