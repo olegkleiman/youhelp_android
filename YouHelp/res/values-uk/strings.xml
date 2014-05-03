@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">You Help</string>
+    
+
+    <string name="action_settings">Налаштування&#8230;</string>
+    <string name="you_are_here">Ви тут</string>
+    <string name="hint">Натяк</string>
+    
+    <string name="help_button_caption">Допомога</string>
+    <string name="hello_button_caption">Вітаю!</string>
+    <string name="welcome_button_caption">Ласкаво просимо</string>
+    <string name="ping_button_caption">Хто тут?</string>
+    <string name="emergency_button_caption">SOS</string>
+    
+    <string name="refresh_button_caption">Оновити</string>
+    <string name="sendmessage_button_caption">Надіслати</string>
+    <string name="next_register_button_caption">Наступна</string>
+    <string name="register_1_title">Вибір методу реєстрації</string>
+    
+    <string name="radio_createnew">Створити нового користувача</string>
+    <string name="radio_fbLogin">Увійти з Facebook</string>
+    
+    <string name="menu_settings">Налаштування</string>
+    <string name="title_activity_main">MainActivity</string>
+    
+    <string name="create_user_button_caption">Створити</string>
+    <string name="user_name_caption">Ім\'я користувача:</string>
+    <string name="user_password_caption">Пароль:</string>
+    <string name="user_password_hint">Мінімум 8 символів. Тільки буквено-цифрові і розділові знаки</string>
+    <string name="user_email_caption">E-Mail:</string>
+     
+    <string name="pref_send_report">Send crash reports</string>
+    <string name="pref_send_report_summary">Helps to fix bugs</string>
+    <string name="pref_map_apps">Мапи</string>
+    <string name="pref_map_apps_summary">Виберіть мапу</string>
+    <string name="pref_user_name">Встановити ім\'я користувача</string>
+    <string name="pref_user_name_summary">Встановити ім\'я вашого користувача</string>
+     
+    <string name="pref_user_profile">Профіль користувача</string>
+    <string name="pref_update_setting">Оновити установки</string>
+    <string name="send_toast_service_url">http://youhelp.cloudapp.net/YouHelpService.svc/sendtoast</string>
+    <string name="send_chatmessage_url">http://youhelp.cloudapp.net/YouHelpService.svc/sendchatmessage</string>
+    <string name="app_id">531384416976939</string>
+    
+    <string name="pref_emergency_numbers">Термінові телефони</string>
+    <string name="pref_emergency_numbers_summary">Встановіть терміновий номер телефону</string>
+    <string name="pref_emergency_number1">Номер 1</string>
+    <string name="pref_emergency_number2">Номер 2</string>
+    <string name="pref_emergency_number3">Номер 3</string>
+    <string name="buttonDeleteAll">Видалити все</string>
+    <string name="buttonCallMe">Зателефонуйте мені</string>   
+
+ </resources>

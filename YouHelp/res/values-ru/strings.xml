@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">You Help</string>
+    <string name="action_settings">Установки&#8230;</string>
+    <string name="you_are_here">Вы здесь</string>
+    <string name="hint">Подсказка</string>
+    
+    <string name="help_button_caption">Помощь</string>
+    <string name="hello_button_caption">Привет!</string>
+    <string name="welcome_button_caption">Добро пожаловать</string>
+    <string name="ping_button_caption">Кто здесь?</string>
+    <string name="emergency_button_caption">SOS</string>
+    
+    <string name="refresh_button_caption">Обновить</string>
+    <string name="sendmessage_button_caption">Послать</string>
+    <string name="next_register_button_caption">Следующая</string>
+    <string name="register_1_title">Выбор метода регистрации</string>
+    
+    <string name="radio_createnew">Создать нового пользователя</string>
+    <string name="radio_fbLogin">Зайти через Facebook</string>
+    
+    <string name="menu_settings">Установки</string>
+    <string name="title_activity_main">MainActivity</string>
+    
+    <string name="create_user_button_caption">Создать</string>
+    <string name="user_name_caption">Имя пользователя:</string>
+    <string name="user_password_caption">Пароль:</string>
+    <string name="user_password_hint">Минимум 8 символов. Только буквенно-цифровые и знаки препинания</string>
+    <string name="user_email_caption">E-Mail:</string>
+     
+    <string name="pref_send_report">Send crash reports</string>
+    <string name="pref_send_report_summary">Helps to fix bugs</string>
+    <string name="pref_map_apps">Карты</string>
+    <string name="pref_map_apps_summary">Выберите карты</string>
+    <string name="pref_user_name">Установить имя пользователя</string>
+    <string name="pref_user_name_summary">Установить имя вашего пользователя</string>
+     
+    <string name="pref_user_profile">Профиль пользователя</string>
+    <string name="pref_update_setting">Обновить установки</string>
+    <string name="send_toast_service_url">http://youhelp.cloudapp.net/YouHelpService.svc/sendtoast</string>
+    <string name="send_chatmessage_url">http://youhelp.cloudapp.net/YouHelpService.svc/sendchatmessage</string>
+    <string name="app_id">531384416976939</string>
+    
+    <string name="pref_emergency_numbers">Аварийные телефоны</string>
+    <string name="pref_emergency_numbers_summary">Установить аварийный номер телефона</string>
+    <string name="pref_emergency_number1">Номер 1</string>
+    <string name="pref_emergency_number2">Номер 2</string>
+    <string name="pref_emergency_number3">Номер 3</string>
+    <string name="buttonDeleteAll">Удалить всё</string>
+    <string name="buttonCallMe">Позвоните мне</string>      
+    
+</resources>
